@@ -541,6 +541,76 @@ const { title, showHero = true } = Astro.props;
   }
 }
 
+@keyframes mistBurstLeftTopMobile {
+  0% {
+    opacity: 0;
+    transform: translateX(-90px) translateY(-10px) scale(0.9);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 0.88;
+    transform: translateX(0) translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes mistBurstRightTopMobile {
+  0% {
+    opacity: 0;
+    transform: translateX(90px) translateY(-10px) scale(0.9);
+    filter: blur(12px);
+  }
+  100% {
+    opacity: 0.88;
+    transform: translateX(0) translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes mistFloatLeftTopMobile {
+  0% {
+    opacity: 0.88;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateX(10px) translateY(5px) scale(1.01);
+  }
+}
+
+@keyframes mistFloatRightTopMobile {
+  0% {
+    opacity: 0.88;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateX(-15px) translateY(5px) scale(1.01);
+  }
+}
+
+@keyframes mistFloatLeftBottomMobile {
+  0% {
+    opacity: 0.92;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0.97;
+    transform: translateX(12px) translateY(-6px) scale(1.01);
+  }
+}
+
+@keyframes mistFloatRightBottomMobile {
+  0% {
+    opacity: 0.92;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0.97;
+    transform: translateX(-12px) translateY(-6px) scale(1.01);
+  }
+}
+
 @keyframes heroPush {
   0% {
     transform: scale(1.035);
@@ -647,12 +717,18 @@ const { title, showHero = true } = Astro.props;
 
   .mist-left-bottom {
     left: -14%;
-    bottom: -4%;
+    bottom: -9%;
+    animation:
+      mistBurstLeftBottom 1.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both,
+      mistFloatLeftBottomMobile 11s ease-in-out 1.5s infinite alternate;
   }
 
   .mist-right-bottom {
     right: -14%;
-    bottom: -5%;
+    bottom: -14%;
+    animation:
+      mistBurstRightBottom 1.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both,
+      mistFloatRightBottomMobile 11.5s ease-in-out 1.5s infinite alternate;
   }
 }
   .hero-image-m {
@@ -709,11 +785,11 @@ const { title, showHero = true } = Astro.props;
   }
 
   .mist-left-bottom {
-    bottom: -4%;
+    bottom: -9%;
   }
 
   .mist-right-bottom {
-    bottom: -5%;
+    bottom: -14%;
   }
 }
 
@@ -749,6 +825,16 @@ const { title, showHero = true } = Astro.props;
     padding: 0 14px;
     font-size: 0.82rem;
     letter-spacing: 0.1em;
+    background-color: var(--primary-gray);
+    color: var(--white);
+    border-color: var(--white);
+    box-shadow: none;
+  }
+
+  .ticket-button:hover {
+    background-color: var(--primary-gray);
+    color: var(--white);
+    border-color: var(--white);
   }
 
   .ticket-label-desktop {

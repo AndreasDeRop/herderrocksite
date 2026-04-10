@@ -83,8 +83,9 @@ import VIPSponsors from "../components/VIPSponsors.astro";
         <div class="aftermovie-video-wrap">
         <video
           controls
-          preload="none"
+          preload="metadata"
           playsinline
+          muted
           poster="/visuals/aftermovie-poster.avif"
           class="aftermovie-video"
         >
@@ -785,3 +786,44 @@ import VIPSponsors from "../components/VIPSponsors.astro";
 
 
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const aftermovieWrap = document.querySelector(".aftermovie-video-wrap");
+    const aftermovieVideo = document.querySelector(".aftermovie-video");
+
+    if (!(aftermovieWrap instanceof HTMLDivElement) || !(aftermovieVideo instanceof HTMLVideoElement)) {
+      return;
+    }
+
+    const togglePlayback = async (isVisible: boolean) => {
+      if (isVisible) {
+        try {
+          await aftermovieVideo.play();
+        } catch (_error) {
+          // Some browsers still gate autoplay until the visitor interacts.
+        }
+        return;
+      }
+
+      aftermovieVideo.pause();
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        togglePlayback(entry?.isIntersecting && entry.intersectionRatio >= 0.45);
+      },
+      {
+        threshold: [0.45, 0.6],
+      },
+    );
+
+    observer.observe(aftermovieWrap);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        aftermovieVideo.pause();
+      }
+    });
+  });
+</script>
