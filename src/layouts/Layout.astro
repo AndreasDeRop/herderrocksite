@@ -20,10 +20,21 @@ const { title, showHero = true } = Astro.props;
   <body>
     <header>
       <a href="https://herderrock.be" class="logo"><h1>Herderrock</h1></a>
-      <div class="hamburger" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
+      <div class="header-actions">
+        <a
+          href="https://herderrock.eventsquare.store/"
+          class="ticket-button"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span class="ticket-label-desktop">Koop tickets</span>
+          <span class="ticket-label-mobile">TICKETS</span>
+        </a>
+        <div class="hamburger" onclick="toggleMenu()">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
       <div class="menu" id="menu" onclick="toggleMenu()">
         <a href="/">Home</a>
@@ -239,6 +250,48 @@ const { title, showHero = true } = Astro.props;
     text-align: center;
   }
 
+  .header-actions {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ticket-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 57px;
+    padding: 0 22px;
+    background-color: var(--white);
+    color: var(--primary-gray);
+    border: 2px solid var(--black);
+    box-shadow: 0 0 0 2px rgba(237, 28, 36, 0.25);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 800;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .ticket-button:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-gray);
+    color: var(--white);
+    border-color: var(--white);
+  }
+
+  .ticket-label-mobile {
+    display: none;
+  }
+
   .hamburger {
     cursor: pointer;
     display: flex;
@@ -246,10 +299,6 @@ const { title, showHero = true } = Astro.props;
     width: 30px;
     height: 25px;
     justify-content: space-between;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1001;
     background-color: var(--red);
     padding: 16px;
   }
@@ -518,7 +567,18 @@ const { title, showHero = true } = Astro.props;
   display: block;
 }
 
+  .hero-ticket-mobile {
+    display: none;
+    background-color: var(--white);
+  }
+
 @media only screen and (max-width: 992px) {
+  .header-actions {
+    top: 16px;
+    right: 16px;
+    gap: 10px;
+  }
+
   .hero-image-m {
     display: block;
   }
@@ -682,6 +742,21 @@ const { title, showHero = true } = Astro.props;
 
   .mist-right {
     right: -14%;
+  }
+
+  .ticket-button {
+    min-height: 46px;
+    padding: 0 14px;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+  }
+
+  .ticket-label-desktop {
+    display: none;
+  }
+
+  .ticket-label-mobile {
+    display: inline;
   }
 }
 </style>
