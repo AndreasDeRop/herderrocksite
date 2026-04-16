@@ -95,6 +95,14 @@ const { title, showHero = true } = Astro.props;
 </html>
 
 <style is:global>
+  @font-face {
+    font-family: "Herderrock Impact";
+    src: url("/fonts/impact.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
   :root {
     --red: #ED1C24;
     --white: #F9EED5;
@@ -124,7 +132,7 @@ const { title, showHero = true } = Astro.props;
   }
 
   h3 {
-    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-family: "Herderrock Impact", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   }
 
   code {
