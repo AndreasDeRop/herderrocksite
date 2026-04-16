@@ -78,6 +78,11 @@ const { title, showHero = true } = Astro.props;
 )}
     <slot />
     <footer>© Herderrock 1985 - 2026</footer>
+    <div class="site-credit">
+      <a href="https://www.oddunit.be" target="_blank" rel="noreferrer">
+        Made by OddUnitStudio
+      </a>
+    </div>
     <script>
       const toggleMenu = () => {
         const menu = document.getElementById("menu");
@@ -256,6 +261,24 @@ const { title, showHero = true } = Astro.props;
     background-color: var(--primary-gray);
     padding: 16px;
     text-align: center;
+  }
+
+  .site-credit {
+    background-color: var(--primary-gray);
+    padding: 0 16px 16px;
+    text-align: center;
+  }
+
+  .site-credit a {
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.82;
+    transition: opacity 0.2s ease;
+    font-size: small;
+  }
+
+  .site-credit a:hover {
+    opacity: 1;
   }
 
   .header-actions {
