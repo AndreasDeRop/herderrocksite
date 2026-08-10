@@ -55,10 +55,58 @@ const lineupActs = [
 
 
 ];
+
+const eventDescription = "Herderrock 2026 is een muziekfestival in Herdersem (Aalst) op zaterdag 5 september 2026 met Customs, Tijs Vanneste & Tangled Horns en lokaal talent.";
+const eventJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "MusicEvent",
+  name: "Herderrock 2026",
+  description: eventDescription,
+  startDate: "2026-09-05T15:30:00+02:00",
+  endDate: "2026-09-06T04:00:00+02:00",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  eventStatus: "https://schema.org/EventScheduled",
+  url: "https://herderrock.be/",
+  image: ["https://herderrock.be/visuals/banner-main.webp"],
+  location: {
+    "@type": "Place",
+    name: "Festivalweide Lambrecht",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Broekstraat",
+      addressLocality: "Herdersem",
+      postalCode: "9310",
+      addressRegion: "Aalst",
+      addressCountry: "BE",
+    },
+  },
+  organizer: {
+    "@type": "Organization",
+    name: "VZW Herderrock",
+    url: "https://herderrock.be/",
+  },
+  offers: {
+    "@type": "Offer",
+    url: "https://herderrock.eventsquare.store/",
+    availability: "https://schema.org/InStock",
+  },
+  performer: lineupActs.map((act) => ({
+    "@type": "MusicGroup",
+    name: act.name,
+  })),
+};
 ---
 
-<Layout title="Herderrock">
+<Layout
+  title="Herderrock 2026 | Muziekfestival in Herdersem (Aalst)"
+  description={eventDescription}
+  canonicalPath="/"
+  image="/visuals/banner-main.webp"
+  imageAlt="Herderrock 2026 muziekfestival in Herdersem Aalst"
+  jsonLd={eventJsonLd}
+>
   <main>
+    <h1 class="sr-only">Herderrock 2026 - muziekfestival in Herdersem (Aalst)</h1>
     <section class="featured-band padding-top">
       <div class="featured-band-shell padding-x padding-y">
         <div class="featured-band-card">
@@ -123,20 +171,21 @@ const lineupActs = [
 
     <section id="about" class="about padding-y">
       <article class="about-left padding-x">
-        <p>Herderrock, een cosy festival sinds 1985</p>
+        <p>Herderrock is een cosy muziekfestival in Herdersem (Aalst) sinds 1985</p>
         <p>
           Wat startte als een projectje in de tuin van het plaatselijke
           jeugdhuis, is ondertussen reeds uitgegroeid tot een klassieker in de
           streek.
         </p>
         <p>
-          Elk jaar streven we voor een cosy ervaring voor jong en al iets ouder,
+          Elk jaar streven we naar een cosy ervaring voor jong en al iets ouder,
           met de nadruk op lokaal talent maar ook de Belgische rising stars in
           de rockwereld komen aan bod.
         </p>
         <p id="mb">
-          Dit jaar vieren we onze 41ste editie, en dat doen we met een
-          spectaculaire affiche. Op <strong>5 september</strong>, plaats wordt binnenkort bekend!
+          Dit jaar vieren we onze 41ste editie op zaterdag <strong>5 september 2026</strong>
+          op Festivalweide Lambrecht in de Broekstraat in Herdersem (Aalst), met een
+          spectaculaire affiche.
         </p>
       </article>
 
@@ -163,6 +212,7 @@ const lineupActs = [
             <h2>De lineup is er!</h2>
             <p>
               <strong>Customs</strong> staat vast als headliner voor Herderrock 2026,
+              het muziekfestival in Aalst voor rock, lokaal talent en Belgische bands,
               met onder meer <strong>Tijs Vanneste & Tangled Horns</strong>,
               <strong>DNSBR</strong>, <strong>SUSTAIN</strong>, <strong>Poeslief</strong>
               en onze DJ's op de affiche.

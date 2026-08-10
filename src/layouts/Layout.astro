@@ -1,10 +1,45 @@
 ---
 interface Props {
   title: string;
+  description?: string;
+  canonicalPath?: string;
+  image?: string;
+  imageAlt?: string;
   showHero?: boolean;
+  jsonLd?: Record<string, any> | Record<string, any>[];
 }
 
-const { title, showHero = true } = Astro.props;
+const siteUrl = "https://herderrock.be";
+const {
+  title,
+  description = "Herderrock is een muziekfestival in Herdersem (Aalst) met rock, Belgische bands, lokaal talent en een gezellige festivalsfeer sinds 1985.",
+  canonicalPath = Astro.url.pathname,
+  image = "/visuals/banner-main.webp",
+  imageAlt = "Herderrock muziekfestival in Herdersem Aalst op zaterdag 5 september 2026",
+  showHero = true,
+  jsonLd = [],
+} = Astro.props;
+
+const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
+const imageUrl = new URL(image, siteUrl).toString();
+const pageJsonLd = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "VZW Herderrock",
+    url: siteUrl,
+    logo: new URL("/logo.png", siteUrl).toString(),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Herderrock",
+    url: siteUrl,
+    inLanguage: "nl-BE",
+  },
+  ...pageJsonLd,
+];
 ---
 
 <!doctype html>
@@ -18,9 +53,28 @@ const { title, showHero = true } = Astro.props;
       gtag('config', 'G-9NPZN5CLXC');
     </script>
     <meta charset="UTF-8" />
-    <meta name="description" content="Herderrock, cosy festival sinds 1985" />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="VZW Herderrock" />
+    <meta name="theme-color" content="#ed1c24" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:locale" content="nl_BE" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Herderrock" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    {structuredData.map((data) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(data)}></script>
+    ))}
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
@@ -28,7 +82,7 @@ const { title, showHero = true } = Astro.props;
   <body>
     <header>
       <a href="https://herderrock.be" class="logo">
-        <h1>Herderrock</h1>
+        <span class="site-name">Herderrock</span>
       </a>
 
       <div class="header-actions">
@@ -252,9 +306,20 @@ const { title, showHero = true } = Astro.props;
   .logo:hover {
     background-image: url("/logo-hover.webp");
   }
-
-  .logo h1 {
+  .logo .site-name {
     display: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   header {

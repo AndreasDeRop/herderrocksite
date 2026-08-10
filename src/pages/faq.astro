@@ -1,8 +1,79 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const faqDescription = "Praktische info over Herderrock, het muziekfestival in Herdersem (Aalst): tickets, parking, toegankelijkheid, openingsuren, veiligheid en het 3D-terreinplan.";
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Wat is Herderrock?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Herderrock is een muziekfestival in Herdersem (Aalst) dat georganiseerd wordt door VZW Herderrock.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Waar kan ik tickets kopen?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Tickets voor Herderrock koop je via de officiele ticketshop van Herderrock.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Wanneer opent Herderrock?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "De deuren openen op zaterdag 5 september 2026 om 15:30. Het eerste optreden start om 16:00 en het festival sluit om 04:00 op zondag 6 september 2026.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Waar parkeren?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Kom bij voorkeur met de fiets. Voor auto's is er geen parking op de festivalweide zelf. Parkeer enkel in de toegelaten zones en parkeer zeker niet op de toegangsweg naar de festivalweide, zodat bewoners, organisatie en hulpdiensten altijd door kunnen. Zoek je toch nog ergens een parkeerplaats? Ter hoogte van Gilbos NV kan je parkeren (zie onderstaande foto)",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Hoe luid is Herderrock?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Herderrock respecteert de geluidsnormen van de Stad Aalst. We begrijpen dat het festival voor de buurt overlast kan veroorzaken en vragen bezoekers om buiten de festivalzone geen lawaai te maken dat door omwonenden als storend kan worden ervaren.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Wat te doen in geval van nood?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Volg de instructies van de organisatie, verlaat de site vlot en houd de volledige toegangsweg vrij voor hulpdiensten. Er zijn twee verzamelplaatsen voorzien bij evacuatie. Evacueer eerst en help waar nodig; filmen of posten op sociale media helpt niemand.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Kan ik het terrein op voorhand bekijken?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Ja. In de FAQ staat een 3D-terreinplan van Herderrock 2026 waarmee bezoekers de festivalweide, inkom, bar, podium en praktische zones op voorhand kunnen bekijken.",
+      },
+    },
+  ],
+};
 ---
 
-<Layout title="FAQ | Herderrock">
+<Layout
+  title="FAQ Herderrock | Praktische info muziekfestival Aalst"
+  description={faqDescription}
+  canonicalPath="/faq/"
+  image="/visuals/banner-main.webp"
+  imageAlt="Praktische info voor Herderrock muziekfestival in Aalst"
+  jsonLd={faqJsonLd}
+>
   <main class="margin-top">
     <h1 class="title title-left">FAQ</h1>
     <section class="faq padding-y padding-x">
@@ -42,8 +113,23 @@ import Layout from "../layouts/Layout.astro";
           <p>
             Voor auto's is er GEEN parkeergelegenheid op de festivalweide zelf.
             Bezoekers kunnen parkeren in de omliggende straten. We vragen wel om rekening te houden met de buurt: respecteer de
-            rust en laat geen afval achter.
+            rust en laat geen afval achter. Zoek je toch nog een parkeerplaats? Je kan ook parkeren ter hoogte van Gilbos NV (zie onderstaande foto)
           </p>
+          <p>
+            <strong>Belangrijk:</strong> parkeer zeker niet op de toegangsweg naar
+            de festivalweide. Die weg moet altijd vrij blijven voor bewoners,
+            organisatie en hulpdiensten. Parkeer dus enkel in de toegelaten zones.
+          </p>
+          <figure class="faq-media">
+            <img
+              src="/visuals/parking-route-herderrock.webp"
+              alt="Route en parkeerinfo voor Herderrock"
+              loading="lazy"
+              decoding="async"
+              width="1294"
+              height="602"
+            />
+          </figure>
         </div>
       </div>
       <div class="faq-item">
@@ -91,9 +177,42 @@ import Layout from "../layouts/Layout.astro";
         </button>
         <div class="faq-answer">
           <p>
-            Het festival start om 16:00 op 6 september en sluit om 04:00 op 7
-            september.
+            De deuren openen op zaterdag 5 september 2026 om 15:30. Het eerste optreden
+            start om 16:00 en het festival sluit om 04:00 op zondag 6 september 2026.
           </p>
+        </div>
+      </div>
+      <div class="faq-item faq-item-terrain">
+        <button class="faq-question">
+          <h3>Kan ik het terrein op voorhand bekijken?</h3>
+          <span class="icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>
+            Ja. Via het 3D-terreinplan van Herderrock 2026 kan je de festivalweide,
+            inkom, bar, podium en praktische zones vooraf bekijken.
+          </p>
+
+          <div class="terrain-viewer">
+            <model-viewer
+              src="/models/hk2026.glb"
+              poster="/models/hk2026-poster.png"
+              alt="3D terreinplan van Herderrock 2026"
+              camera-controls
+              touch-action="pan-y"
+              loading="lazy"
+              reveal="auto"
+              interaction-prompt="none"
+              camera-target="-35m 0m 62m"
+              camera-orbit="0deg 0deg 135m"
+              field-of-view="55deg"
+              min-camera-orbit="auto auto 55m"
+              max-camera-orbit="auto auto 260m"
+              shadow-intensity="0.35"
+              exposure="0.9"
+              environment-image="neutral"
+            ></model-viewer>
+          </div>
         </div>
       </div>
       <div class="faq-item">
@@ -105,8 +224,8 @@ import Layout from "../layouts/Layout.astro";
           <p>
             Iedereen is van harte welkom op ons festival, ook bezoekers die
             gebruikmaken van een rolstoel. Onze festivalweide is in principe
-            goed bereikbaar, maar houd er rekening mee dat het – zeker bij nat
-            weer – soms praktischer kan zijn om een assistent mee te brengen.
+            goed bereikbaar, maar houd er rekening mee dat het - zeker bij nat
+            weer - soms praktischer kan zijn om een assistent mee te brengen.
             Daarnaast voorzien wij een comfortabele zithoek op de weide. Indien
             u ten minste één dag vóór het evenement een aanvraag indient via
             onze Facebookpagina, kunnen wij extra stoelen voor u reserveren.
@@ -125,16 +244,9 @@ import Layout from "../layouts/Layout.astro";
         <div class="faq-answer">
           <p>
             Wij voorzien 2 betalingsmethodes:<br />
-            Cash is king, koop je drankbonnetjes dus gerust met jullie zuurverdiende
-            zwarte biljetten *.<br />
-            Voor de rest kan je contactloos betalen met je credit- of debetkaart.
+            Cash is king!
+            Maar je kan ook contactloos betalen met je credit- of debetkaart.
           </p>
-          <small>* Zwarte biljetten zijn de beste biljetten**</small><br />
-          <small
-            >** Herderrock behoudt zich het recht voor om mopjes te maken over
-            zwart geld. Dit is uiteraard geen pleidooi om zwart geld te
-            gebruiken – wit geld is ook welkom.</small
-          >
         </div>
       </div>
       <div class="faq-item">
@@ -166,7 +278,7 @@ import Layout from "../layouts/Layout.astro";
             dankzij deze verkoop. Daarom worden eigen dranken en eten niet
             toegelaten op de festivalweide. Voor de mensen die een grote
             hoeveelheid drank willen drinken, hebben we een speciale zone
-            genaamd "Den Tetterbaar"<br />
+            genaamd "Den Tetterbar"<br />
             Alle soorten vuurwerk zijn verboden op het festivalterrein.<br />
             Het is ten strengste verboden om op het festivalterrein drugs bij te
             hebben, te verkopen of te gebruiken.<br />
@@ -184,11 +296,17 @@ import Layout from "../layouts/Layout.astro";
           <p>
             Wij volgen de regels zoals deze ons zijn opgelegd door de bevoegde
             diensten van de Stad Aalst. Hierbij respecteren wij de geluidsnorm
-            van 95dB tot 1u ’s nachts, nadien tot 4u ’s nachts geldt 90dB als
+            van 95dB tot 1u 's nachts, nadien tot 4u 's nachts geldt 90dB als
             maximum en volgen wij die uiteraard ook op.<br />
             Wij hebben ook oordopjes ter beschikking die gratis kunnen worden opgehaald
             aan de toog. Daarnaast is het ook toegestaan om je eigen aangepaste gehoorsbescherming
             mee te nemen.
+          </p>
+          <p>
+            We begrijpen dat dit voor de buurt overlast kan veroorzaken. Daarom
+            vragen we om die overlast niet groter te maken: maak buiten de
+            festivalzone geen lawaai dat door omwonenden als storend kan worden
+            ervaren.
           </p>
         </div>
       </div>
@@ -199,11 +317,32 @@ import Layout from "../layouts/Layout.astro";
         </button>
         <div class="faq-answer">
           <p>
-            We hebben als organisatie een noodplan opgesteld, in geval van nood
+            We hebben als organisatie een noodplan opgesteld. In geval van nood
             zal dit plan in werking worden gesteld en zal de organisatie de
             mensen ter plaatse inlichten. Het belangrijkste is dat je jezelf en
             je gezinsleden veilig houdt, en vooral niet begint te panikeren.
           </p>
+          <p>
+            Er zijn twee verzamelplaatsen voorzien bij evacuatie. Verlaat de site
+            zo snel en vlot mogelijk en houd de volledige toegangsweg vrij, zodat
+            de hulpdiensten snel kunnen ingrijpen. Er mag dus enkel geparkeerd
+            worden in de toegelaten zones.
+          </p>
+          <p>
+            We vragen ook om eerst te evacueren en waar mogelijk mensen te helpen,
+            in plaats van te filmen of te posten op sociale media. Iemand helpen
+            is niet hetzelfde als iemand filmen.
+          </p>
+          <figure class="faq-media">
+            <img
+              src="/visuals/nooduitgangen-herderrock.webp"
+              alt="Nooduitgangen en verzamelplaatsen bij Herderrock"
+              loading="lazy"
+              decoding="async"
+              width="587"
+              height="333"
+            />
+          </figure>
         </div>
       </div>
       <div class="faq-item">
@@ -306,7 +445,7 @@ h1.title.title-left {
 }
 
 .faq-answer.active {
-  max-height: 1200px;
+  max-height: 2400px;
   padding: 0 24px 24px;
 }
 
@@ -329,6 +468,18 @@ h1.title.title-left {
   display: block;
   margin-top: 12px;
   opacity: 0.9;
+}
+
+.faq-media {
+  margin: 18px 0 0;
+}
+
+.faq-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--white);
+  background: var(--black);
 }
 
 .icon {
@@ -367,6 +518,23 @@ h1.title.title-left {
   color: var(--red);
   text-decoration: none;
 }
+.terrain-viewer {
+  margin-top: 22px;
+  border: 2px solid var(--white);
+  background: var(--black);
+  color: var(--white);
+  overflow: hidden;
+}
+
+.terrain-viewer model-viewer {
+  display: block;
+  width: 100%;
+  height: min(72vh, 680px);
+  min-height: 520px;
+  background: var(--black);
+  --progress-bar-color: var(--red);
+  --progress-bar-height: 4px;
+}
 
 @media only screen and (max-width: 900px) {
   h1.title.title-left {
@@ -399,10 +567,16 @@ h1.title.title-left {
     height: 32px;
     font-size: 1.2rem;
   }
+  .terrain-viewer model-viewer {
+    height: 62vh;
+    min-height: 360px;
+  }
 }
 </style>
 
-<script>
+<script is:inline type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
+
+<script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
     const faqQuestions = document.querySelectorAll(".faq-question");
 
@@ -411,9 +585,6 @@ h1.title.title-left {
         const answer = question.nextElementSibling;
         if (!answer) return;
 
-        const isActive = question.classList.contains("active");
-
-        // Close all other answers
         faqQuestions.forEach((q) => {
           const otherAnswer = q.nextElementSibling;
           if (q !== question && otherAnswer) {
@@ -422,7 +593,6 @@ h1.title.title-left {
           }
         });
 
-        // Toggle current answer
         question.classList.toggle("active");
         answer.classList.toggle("active");
       });

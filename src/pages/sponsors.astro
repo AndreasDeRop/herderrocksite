@@ -1,9 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import VIPSponsors from "../components/VIPSponsors.astro";
+
+const sponsorsDescription = "Sponsors en partners van Herderrock, het muziekfestival in Herdersem (Aalst), met steun van lokale ondernemingen, Stad Aalst en partners uit de streek.";
 ---
 
-<Layout title="Sponsors | Herderrock">
+<Layout
+  title="Sponsors Herderrock | Muziekfestival Aalst"
+  description={sponsorsDescription}
+  canonicalPath="/sponsors/"
+  image="/banner-sponsors.png"
+  imageAlt="Sponsors van Herderrock muziekfestival in Aalst"
+>
   <main>
     <VIPSponsors title="Dank aan onze SPONSORS" />
   </main>
