@@ -199,7 +199,7 @@ const faqJsonLd = {
               poster="/models/hk2026-poster.png"
               alt="3D terreinplan van Herderrock 2026"
               camera-controls
-              touch-action="pan-y"
+              touch-action="none"
               loading="lazy"
               reveal="auto"
               interaction-prompt="none"
@@ -524,6 +524,7 @@ h1.title.title-left {
   background: var(--black);
   color: var(--white);
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .terrain-viewer model-viewer {
@@ -532,6 +533,9 @@ h1.title.title-left {
   height: min(72vh, 680px);
   min-height: 520px;
   background: var(--black);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
   --progress-bar-color: var(--red);
   --progress-bar-height: 4px;
 }
