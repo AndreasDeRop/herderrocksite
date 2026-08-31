@@ -173,6 +173,7 @@ const eventJsonLd = {
             >
               <div class="lineup-card-image">
                 <img src={act.image} alt={act.alt} loading="lazy" decoding="async" />
+                <span class="lineup-card-image-arrow" aria-hidden="true">&#8599;</span>
               </div>
               <div class="lineup-card-body">
                 <span class={`lineup-card-name ${act.nameClass ?? ""}`}>
@@ -233,7 +234,10 @@ const eventJsonLd = {
                 >
                   <span class="timetable-act-time">{act.schedule.label}</span>
                   <strong>{act.name}</strong>
-                  <span>{act.scheduleMeta ?? act.meta}</span>
+                  <span class="timetable-act-action">
+                    <span class="timetable-act-meta">{act.scheduleMeta ?? act.meta}</span>
+                    <span class="timetable-act-arrow" aria-hidden="true">&#8599;</span>
+                  </span>
                 </a>
               ))}
 
@@ -659,6 +663,7 @@ const eventJsonLd = {
   }
 
   .lineup-card {
+    position: relative;
     display: block;
     border: 2px solid var(--white);
     background-color: rgba(249, 238, 213, 0.05);
@@ -680,9 +685,11 @@ const eventJsonLd = {
   }
 
   .lineup-card-image {
+    position: relative;
     aspect-ratio: 1 / 1;
     border-bottom: 2px solid var(--white);
     background-color: rgba(0, 0, 0, 0.16);
+    overflow: hidden;
   }
 
   .lineup-card-image img {
@@ -690,6 +697,31 @@ const eventJsonLd = {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  .lineup-card-image-arrow {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    z-index: 2;
+    color: var(--primary-gray);
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow:
+      1px 1px 0 var(--white),
+      -1px 1px 0 var(--white),
+      1px -1px 0 var(--white),
+      -1px -1px 0 var(--white);
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .lineup-card:hover .lineup-card-image-arrow,
+  .lineup-card:focus-visible .lineup-card-image-arrow {
+    transform: translate(3px, -3px);
+    color: var(--primary-gray);
   }
 
   .lineup-card-body {
@@ -899,7 +931,7 @@ const eventJsonLd = {
     display: grid;
     grid-template-columns: minmax(112px, 0.22fr) minmax(0, 1fr) auto;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     padding: 18px 22px;
     border: 2px solid var(--primary-gray);
     background-color: var(--primary-gray);
@@ -944,14 +976,40 @@ const eventJsonLd = {
     text-transform: uppercase;
   }
 
-  .timetable-act span:last-child {
+  .timetable-act-action {
+    display: inline-flex;
+    align-items: center;
     justify-self: end;
+    gap: 8px;
+  }
+
+  .timetable-act-meta {
     padding: 6px 10px;
     border: 1px solid rgba(249, 238, 213, 0.62);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: 0.72rem;
     font-weight: 900;
+  }
+
+  .timetable-act-arrow {
+    display: inline-block;
+    color: var(--red);
+    font-size: 1.65rem;
+    font-weight: 900;
+    line-height: 1;
+    pointer-events: none;
+    text-shadow:
+      1px 1px 0 var(--white),
+      -1px 1px 0 var(--white),
+      1px -1px 0 var(--white),
+      -1px -1px 0 var(--white);
+    transition: transform 0.2s ease;
+  }
+
+  .timetable-act:hover .timetable-act-arrow,
+  .timetable-act:focus-visible .timetable-act-arrow {
+    transform: translate(3px, -3px);
   }
 
   .timetable-now-line {
@@ -1284,10 +1342,17 @@ const eventJsonLd = {
       font-size: clamp(1.42rem, 7.2vw, 2.35rem);
     }
 
-    .timetable-act span:last-child {
+    .timetable-act-action {
       justify-self: start;
+    }
+
+    .timetable-act-meta {
       padding: 4px 8px;
       font-size: 0.66rem;
+    }
+
+    .timetable-act-arrow {
+      font-size: 1.45rem;
     }
 
     .timetable-now-line {
