@@ -173,13 +173,15 @@ const eventJsonLd = {
             >
               <div class="lineup-card-image">
                 <img src={act.image} alt={act.alt} loading="lazy" decoding="async" />
-                <span class="lineup-card-image-arrow" aria-hidden="true">&#8599;</span>
               </div>
               <div class="lineup-card-body">
                 <span class={`lineup-card-name ${act.nameClass ?? ""}`}>
                   {act.cardName ?? act.name}
                 </span>
-                <span class="lineup-card-meta">{act.meta}</span>
+                <span class="lineup-card-meta-wrap">
+                  <span class="lineup-card-meta">{act.meta}</span>
+                  <span class="lineup-card-info" aria-hidden="true"></span>
+                </span>
                 <span class="lineup-card-time">{act.schedule.label}</span>
               </div>
             </a>
@@ -236,7 +238,7 @@ const eventJsonLd = {
                   <strong>{act.name}</strong>
                   <span class="timetable-act-action">
                     <span class="timetable-act-meta">{act.scheduleMeta ?? act.meta}</span>
-                    <span class="timetable-act-arrow" aria-hidden="true">&#8599;</span>
+                    <span class="timetable-act-info" aria-hidden="true"></span>
                   </span>
                 </a>
               ))}
@@ -699,31 +701,6 @@ const eventJsonLd = {
     object-fit: cover;
   }
 
-  .lineup-card-image-arrow {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    z-index: 2;
-    color: var(--primary-gray);
-    font-size: 2rem;
-    font-weight: 900;
-    line-height: 1;
-    text-shadow:
-      1px 1px 0 var(--white),
-      -1px 1px 0 var(--white),
-      1px -1px 0 var(--white),
-      -1px -1px 0 var(--white);
-    transition:
-      transform 0.2s ease,
-      color 0.2s ease;
-  }
-
-  .lineup-card:hover .lineup-card-image-arrow,
-  .lineup-card:focus-visible .lineup-card-image-arrow {
-    transform: translate(3px, -3px);
-    color: var(--primary-gray);
-  }
-
   .lineup-card-body {
     display: flex;
     flex-direction: column;
@@ -747,12 +724,35 @@ const eventJsonLd = {
     white-space: nowrap;
   }
 
+  .lineup-card-meta-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
   .lineup-card-meta {
     font-size: 0.84rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--white);
     opacity: 0.82;
+  }
+
+  .lineup-card-info {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+    background-color: #4d8dff;
+    -webkit-mask: url("/icons/info.png") center / contain no-repeat;
+    mask: url("/icons/info.png") center / contain no-repeat;
+    transition: transform 0.2s ease;
+  }
+
+  .lineup-card:hover .lineup-card-info,
+  .lineup-card:focus-visible .lineup-card-info {
+    transform: scale(1.12);
   }
 
   .lineup-card-time {
@@ -992,24 +992,21 @@ const eventJsonLd = {
     font-weight: 900;
   }
 
-  .timetable-act-arrow {
+  .timetable-act-info {
     display: inline-block;
-    color: var(--red);
-    font-size: 1.65rem;
-    font-weight: 900;
-    line-height: 1;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    background-color: var(--red);
+    -webkit-mask: url("/icons/info.png") center / contain no-repeat;
+    mask: url("/icons/info.png") center / contain no-repeat;
     pointer-events: none;
-    text-shadow:
-      1px 1px 0 var(--white),
-      -1px 1px 0 var(--white),
-      1px -1px 0 var(--white),
-      -1px -1px 0 var(--white);
     transition: transform 0.2s ease;
   }
 
-  .timetable-act:hover .timetable-act-arrow,
-  .timetable-act:focus-visible .timetable-act-arrow {
-    transform: translate(3px, -3px);
+  .timetable-act:hover .timetable-act-info,
+  .timetable-act:focus-visible .timetable-act-info {
+    transform: scale(1.12);
   }
 
   .timetable-now-line {
@@ -1351,8 +1348,9 @@ const eventJsonLd = {
       font-size: 0.66rem;
     }
 
-    .timetable-act-arrow {
-      font-size: 1.45rem;
+    .timetable-act-info {
+      width: 16px;
+      height: 16px;
     }
 
     .timetable-now-line {
