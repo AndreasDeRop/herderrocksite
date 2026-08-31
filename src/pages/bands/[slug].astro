@@ -1,0 +1,431 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { lineupActs, type LineupAct } from "../../data/lineup";
+
+export function getStaticPaths() {
+  return lineupActs.map((act) => ({
+    params: { slug: act.slug },
+    props: { act },
+  }));
+}
+
+const { act } = Astro.props as { act: LineupAct };
+const siteUrl = "https://herderrock.be";
+const bandUrl = `${siteUrl}/bands/${act.slug}/`;
+const performanceLabel = act.scheduleMeta ?? act.meta;
+const bandDescription = `${act.name} op Herderrock 2026: ${act.schedule.label}. ${
+  act.tagline ? `${act.tagline}. ` : ""
+}${act.intro}`;
+const bandJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    name: act.name,
+    image: new URL(act.image, siteUrl).toString(),
+    url: bandUrl,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicEvent",
+    name: `${act.name} op Herderrock 2026`,
+    startDate: act.schedule.startIso,
+    endDate: act.schedule.endIso,
+    url: bandUrl,
+    image: [new URL(act.image, siteUrl).toString()],
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: {
+      "@type": "Place",
+      name: "Festivalweide Lambrecht",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Broekstraat",
+        addressLocality: "Herdersem",
+        postalCode: "9310",
+        addressRegion: "Aalst",
+        addressCountry: "BE",
+      },
+    },
+    performer: {
+      "@type": "MusicGroup",
+      name: act.name,
+    },
+  },
+];
+---
+
+<Layout
+  title={`${act.name} | Herderrock 2026`}
+  description={bandDescription}
+  canonicalPath={`/bands/${act.slug}/`}
+  image={act.image}
+  imageAlt={act.alt}
+  showHero={false}
+  jsonLd={bandJsonLd}
+>
+  <main class="band-page">
+    <section class="band-hero padding-x">
+      <div class="band-back-links">
+        <a class="band-back-link" href="/#line-up">Terug naar line-up</a>
+        <a class="band-back-link band-back-link-timetable" href="/#timetable">
+          Keer terug naar timetable
+        </a>
+      </div>
+
+      <div class="band-hero-grid">
+        <div class="band-image-wrap">
+          <img src={act.image} alt={act.alt} loading="eager" decoding="async" />
+        </div>
+
+        <div class="band-hero-copy">
+          <span class="band-kicker">Herderrock 2026</span>
+          <h1>{act.name}</h1>
+          <p>{act.intro}</p>
+
+          <div class="band-time-panel">
+            <span>{act.schedule.label}</span>
+            <strong>{performanceLabel}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band-info padding-x padding-bottom">
+      <div class="band-info-grid">
+        <div>
+          <span class="band-section-kicker">{act.tagline ?? "Info"}</span>
+          <h2>Over {act.name}</h2>
+        </div>
+
+        <div class="band-text">
+          {act.description.map((paragraph) => <p>{paragraph}</p>)}
+
+          <div class="band-actions">
+            <a href="/#timetable">Timetable</a>
+            {
+              act.listenUrl && (
+                <a
+                  class="listen-action"
+                  href={act.listenUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {act.listenLabel ?? "Luister online"}
+                </a>
+              )
+            }
+            <a href="https://herderrock.eventsquare.store/" target="_blank" rel="noreferrer">
+              Tickets
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .band-page {
+    background-color: var(--white);
+  }
+
+  .band-hero {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .band-back-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .band-back-link {
+    display: inline-flex;
+    padding: 10px 14px;
+    border: 2px solid var(--primary-gray);
+    color: var(--primary-gray);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.76rem;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .band-back-link:hover,
+  .band-back-link:focus-visible {
+    transform: translateY(-2px);
+    background-color: var(--primary-gray);
+    color: var(--white);
+    outline: none;
+  }
+
+  .band-back-link-timetable {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .band-back-link-timetable:hover,
+  .band-back-link-timetable:focus-visible {
+    background-color: var(--red);
+    color: var(--white);
+  }
+
+  .band-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+    min-height: 560px;
+    border: 3px solid var(--black);
+    background-color: var(--primary-gray);
+  }
+
+  .band-image-wrap {
+    min-height: 100%;
+    background-color: var(--red);
+    border-right: 3px solid var(--black);
+  }
+
+  .band-image-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 560px;
+    object-fit: cover;
+  }
+
+  .band-hero-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px;
+    color: var(--white);
+  }
+
+  .band-kicker,
+  .band-section-kicker {
+    display: inline-block;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 900;
+    font-size: 0.78rem;
+  }
+
+  .band-kicker {
+    color: var(--white);
+    opacity: 0.82;
+  }
+
+  .band-section-kicker {
+    color: var(--red);
+  }
+
+  .band-hero-copy h1,
+  .band-info h2 {
+    font-family: "Herderrock Impact", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    text-transform: uppercase;
+  }
+
+  .band-hero-copy h1 {
+    color: var(--white);
+    font-size: clamp(3.4rem, 7vw, 6rem);
+    line-height: 0.88;
+    margin-bottom: 20px;
+  }
+
+  .band-hero-copy p {
+    font-size: 1.08rem;
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  .band-time-panel {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0;
+    margin-top: 28px;
+    border: 2px solid var(--white);
+    color: var(--white);
+  }
+
+  .band-time-panel span,
+  .band-time-panel strong {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 58px;
+    padding: 0 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .band-time-panel strong {
+    color: var(--white);
+    background-color: var(--red);
+    border-left: 2px solid var(--white);
+  }
+
+  .band-info {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .band-info-grid {
+    display: grid;
+    grid-template-columns: minmax(240px, 0.36fr) minmax(0, 1fr);
+    gap: 42px;
+    border-top: 3px solid var(--primary-gray);
+    padding-top: 36px;
+  }
+
+  .band-info h2 {
+    color: var(--primary-gray);
+    font-size: clamp(2.6rem, 5vw, 4.5rem);
+    line-height: 0.9;
+  }
+
+  .band-text {
+    color: var(--primary-gray);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .band-text p {
+    margin-bottom: 18px;
+  }
+
+  .band-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .band-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 18px;
+    border: 2px solid var(--primary-gray);
+    background-color: var(--primary-gray);
+    color: var(--white);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .band-actions a:hover,
+  .band-actions a:focus-visible {
+    transform: translateY(-2px);
+    background-color: var(--red);
+    color: var(--white);
+    outline: none;
+  }
+
+  .band-actions .listen-action {
+    border-color: var(--red);
+    background-color: var(--red);
+    color: var(--white);
+  }
+
+  .band-actions .listen-action:hover,
+  .band-actions .listen-action:focus-visible {
+    border-color: var(--primary-gray);
+    background-color: var(--white);
+    color: var(--primary-gray);
+  }
+
+  @media only screen and (max-width: 900px) {
+    .band-hero {
+      padding-top: 32px;
+      padding-bottom: 38px;
+    }
+
+    .band-hero-grid,
+    .band-info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .band-image-wrap {
+      border-right: none;
+      border-bottom: 3px solid var(--black);
+    }
+
+    .band-image-wrap img {
+      min-height: 360px;
+      max-height: 520px;
+    }
+
+    .band-hero-copy {
+      padding: 36px 26px;
+    }
+
+    .band-info-grid {
+      gap: 22px;
+    }
+  }
+
+  @media only screen and (max-width: 560px) {
+    .band-hero {
+      padding-top: 22px;
+      padding-bottom: 32px;
+    }
+
+    .band-hero-grid {
+      min-height: 0;
+      border-width: 2px;
+    }
+
+    .band-image-wrap {
+      border-bottom-width: 2px;
+    }
+
+    .band-image-wrap img {
+      min-height: 260px;
+    }
+
+    .band-hero-copy {
+      padding: 30px 20px;
+    }
+
+    .band-hero-copy h1 {
+      font-size: clamp(2.8rem, 16vw, 4.4rem);
+    }
+
+    .band-time-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .band-time-panel strong {
+      border-left: none;
+      border-top: 2px solid var(--white);
+    }
+
+    .band-info-grid {
+      border-top-width: 2px;
+      padding-top: 28px;
+    }
+
+    .band-actions {
+      flex-direction: column;
+    }
+
+    .band-actions a {
+      width: 100%;
+    }
+  }
+</style>

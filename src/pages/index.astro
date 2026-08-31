@@ -1,60 +1,29 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import VIPSponsors from "../components/VIPSponsors.astro";
+import {
+  eventSchedule,
+  lineupActs,
+  scheduleTicks,
+} from "../data/lineup";
 
-const lineupActs = [
-  {
-    name: "Customs",
-    meta: "Headliner",
-    image: "/bands/customs.webp",
-    alt: "Customs op Herderrock 2026",
-  },
-  {
-    name: "Tijs Vanneste",
-    meta: "& Tangled Horns",
-    image: "/bands/tijs.webp",
-    alt: "Tijs Vanneste & Tangled Horns op Herderrock 2026",
-  },
-  {
-    name: "DNSBR",
-    meta: "Live",
-    image: "/bands/dnsbr.webp",
-    alt: "DNSBR op Herderrock 2026",
-  },
-  {
-    name: "Gino's Eyeball",
-    meta: "Live",
-    image: "/bands/gino's eyeball.webp",
-    alt: "Gino's Eyeball op Herderrock 2026",
-    nameClass: "lineup-card-name-compact",
-  },
-  {
-    name: "SUSTAIN",
-    meta: "Live",
-    image: "/bands/SUSTAIN.webp",
-    alt: "SUSTAIN op Herderrock 2026",
-  },
-  {
-    name: "Poeslief",
-    meta: "Live",
-    image: "/bands/poeslief.webp",
-    alt: "Poeslief op Herderrock 2026",
-  },
-  {
-    name: "Fradri",
-    meta: "DJ set",
-    image: "/bands/fradri.webp",
-    alt: "Fradri op Herderrock 2026",
-  },
-  {
-    name: "DIBBS",
-    meta: "DJ set",
-    image: "/bands/dibbs.webp",
-    alt: "DIBBS op Herderrock 2026",
-  },
-
-
+const lineupCardOrder = [
+  "poeslief",
+  "sustain",
+  "ginos-eyeball",
+  "tijs-vanneste-tangled-horns",
+  "customs",
+  "dnsbr",
+  "fradri",
+  "dibbs",
 ];
+
+const lineupCards = [...lineupActs].sort(
+  (a, b) => lineupCardOrder.indexOf(a.slug) - lineupCardOrder.indexOf(b.slug),
+);
+const timetableActs = [...lineupActs].sort(
+  (a, b) => a.schedule.startMinute - b.schedule.startMinute,
+);
 
 const eventDescription = "Herderrock 2026 is een muziekfestival in Herdersem (Aalst) op zaterdag 5 september 2026 met Customs, Tijs Vanneste & Tangled Horns en lokaal talent.";
 const eventJsonLd = {
@@ -94,6 +63,16 @@ const eventJsonLd = {
     "@type": "MusicGroup",
     name: act.name,
   })),
+  subEvent: timetableActs.map((act) => ({
+    "@type": "MusicEvent",
+    name: `${act.name} op Herderrock 2026`,
+    startDate: act.schedule.startIso,
+    endDate: act.schedule.endIso,
+    performer: {
+      "@type": "MusicGroup",
+      name: act.name,
+    },
+  })),
 };
 ---
 
@@ -109,38 +88,21 @@ const eventJsonLd = {
     <h1 class="sr-only">Herderrock 2026 - muziekfestival in Herdersem (Aalst)</h1>
     <section class="featured-band padding-top">
       <div class="featured-band-shell padding-x padding-y">
-        <div class="featured-band-card">
-          <div class="featured-band-visual">
-            <div class="featured-band-mist-layer">
-              <div class="featured-band-mist featured-band-mist-left">
-                <img src="/visuals/mist-3.webp" alt="" loading="lazy" decoding="async" />
-              </div>
-              <div class="featured-band-mist featured-band-mist-right">
-                <img src="/visuals/mist-2.webp" alt="" loading="lazy" decoding="async" />
-              </div>
-            </div>
-
-            <div class="featured-band-image-frame">
-              <img
-                src="/bands/gino's eyeball.webp"
-                alt="Gino's Eyeball in de spotlight op Herderrock"
-              />
-            </div>
-          </div>
-
+        <div class="featured-band-card featured-band-card-news">
           <div class="featured-band-content">
-            <span class="featured-band-kicker">BAND IN THE PICTURE </span>
-            <h2>Gino's Eyeball</h2>
+            <span class="featured-band-kicker">Nieuws</span>
+            <h2>De timetable is er!</h2>
             <p class="featured-band-lead">
-              Met <strong>Gino's Eyeball</strong> komt een stevige portie rauwe
-              punkenergie terug naar Herderrock. Hun laatste passage is nu exact
-              20 jaar geleden op Herderrock Winter. 🤘
+              Het volledige uurrooster voor Herderrock 2026 staat online.
             </p>
             <p>
-              We verwachten opnieuw een compromisloze liveshow vol energie,
-              meebrulbare refreinen en pure punkrock die je onmogelijk stil laat
-              staan. 🔥
+              Scroll door de dag, volg de live tijdlijn en klik door naar elke
+              band voor extra info.
             </p>
+            <div class="featured-band-links">
+              <a href="#timetable">Bekijk timetable</a>
+              <a href="#line-up">Bekijk line-up</a>
+            </div>
           </div>
         </div>
       </div>
@@ -203,28 +165,82 @@ const eventJsonLd = {
         </div>
 
         <div class="lineup-grid">
-          {lineupActs.map((act) => (
-            <article class="lineup-card lineup-card-confirmed">
+          {lineupCards.map((act) => (
+            <a
+              class="lineup-card lineup-card-confirmed"
+              href={`/bands/${act.slug}/`}
+              aria-label={`Meer info over ${act.name}`}
+            >
               <div class="lineup-card-image">
                 <img src={act.image} alt={act.alt} loading="lazy" decoding="async" />
               </div>
               <div class="lineup-card-body">
-                <span class={`lineup-card-name ${act.nameClass ?? ""}`}>{act.name}</span>
+                <span class={`lineup-card-name ${act.nameClass ?? ""}`}>
+                  {act.cardName ?? act.name}
+                </span>
                 <span class="lineup-card-meta">{act.meta}</span>
+                <span class="lineup-card-time">{act.schedule.label}</span>
               </div>
-            </article>
+            </a>
           ))}
         </div>
 
-        <div class="lineup-bottom">
-          <p class="lineup-note">
-            Speeluren volgen later. Hou onze socials in de gaten en check deze pagina
-            regelmatig terug voor nieuwe bevestigingen.
-          </p>
+      </div>
+    </section>
 
-          <div class="lineup-actions">
-            <a href="/faq">Meer info</a>
-            <a href="/sponsors">Bekijk sponsors</a>
+    <section id="timetable" class="timetable-section padding-y">
+      <div class="timetable-shell padding-x">
+        <div class="timetable-top">
+          <div>
+            <span class="timetable-kicker">{eventSchedule.dateLabel}</span>
+            <h2>Timetable</h2>
+          </div>
+
+          <div class="timetable-live-panel">
+            <span class="timetable-doors">{eventSchedule.doorsLabel}</span>
+            <span class="timetable-status" data-schedule-status>Live vanaf 16:00</span>
+            <button class="timetable-now-button" type="button" data-scroll-now>
+              Naar nu
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="timetable-board"
+          data-schedule
+          data-start={eventSchedule.startIso}
+          data-end={eventSchedule.endIso}
+          data-total-minutes={eventSchedule.totalMinutes}
+          style={`--total-minutes: ${eventSchedule.totalMinutes};`}
+        >
+          <div class="timetable-scroll" data-schedule-scroll>
+            <div class="timetable-grid">
+              {scheduleTicks.map((tick) => (
+                <div class="timetable-tick" style={`--tick-minute: ${tick.minute};`}>
+                  <span>{tick.label}</span>
+                </div>
+              ))}
+
+              {timetableActs.map((act) => (
+                <a
+                  class={`timetable-act ${
+                    act.meta === "Headliner" ? "timetable-act-headliner" : ""
+                  }`}
+                  href={`/bands/${act.slug}/?from=timetable`}
+                  style={`--act-start: ${act.schedule.startMinute}; --act-duration: ${act.schedule.duration};`}
+                  data-act-start={act.schedule.startIso}
+                  data-act-end={act.schedule.endIso}
+                >
+                  <span class="timetable-act-time">{act.schedule.label}</span>
+                  <strong>{act.name}</strong>
+                  <span>{act.scheduleMeta ?? act.meta}</span>
+                </a>
+              ))}
+
+              <div class="timetable-now-line" data-now-line hidden>
+                <span>Nu</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -274,15 +290,22 @@ const eventJsonLd = {
 
   .featured-band,
   .about,
-  .lineup-section {
+  .lineup-section,
+  .timetable-section {
     background-color: var(--white);
   }
 
   .featured-band-shell,
-  .lineup-shell {
+  .lineup-shell,
+  .timetable-shell {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+  }
+
+  .lineup-section,
+  .timetable-section {
+    scroll-margin-top: 96px;
   }
 
   .about {
@@ -358,6 +381,10 @@ const eventJsonLd = {
     border: 3px solid var(--black);
   }
 
+  .featured-band-card-news {
+    grid-template-columns: 1fr;
+  }
+
   .featured-band-visual {
     position: relative;
     min-height: 520px;
@@ -425,6 +452,11 @@ const eventJsonLd = {
     animation: featuredContentIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
   }
 
+  .featured-band-card-news .featured-band-content {
+    min-height: 300px;
+    padding: 48px;
+  }
+
   .featured-band-kicker {
     display: inline-block;
     margin-bottom: 16px;
@@ -474,6 +506,17 @@ const eventJsonLd = {
     margin-top: 22px;
     width: 100%;
     max-width: 360px;
+  }
+
+  .featured-band-card-news .featured-band-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 360px;
+  }
+
+  .featured-band-card-news .featured-band-links a {
+    width: auto;
+    min-width: 170px;
   }
 
   .featured-band-links a {
@@ -533,8 +576,7 @@ const eventJsonLd = {
   }
 
   .lineup-top,
-  .lineup-grid,
-  .lineup-bottom {
+  .lineup-grid {
     position: relative;
     z-index: 2;
   }
@@ -617,10 +659,24 @@ const eventJsonLd = {
   }
 
   .lineup-card {
+    display: block;
     border: 2px solid var(--white);
     background-color: rgba(249, 238, 213, 0.05);
     overflow: hidden;
     min-height: 100%;
+    text-decoration: none;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .lineup-card:hover,
+  .lineup-card:focus-visible {
+    transform: translateY(-4px);
+    background-color: rgba(249, 238, 213, 0.12);
+    border-color: var(--red);
+    outline: none;
   }
 
   .lineup-card-image {
@@ -667,6 +723,15 @@ const eventJsonLd = {
     opacity: 0.82;
   }
 
+  .lineup-card-time {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--white);
+    background-color: var(--red);
+    padding: 6px 10px;
+    border: 1px solid rgba(249, 238, 213, 0.55);
+  }
+
   .lineup-card-placeholder {
     display: flex;
     align-items: center;
@@ -679,47 +744,239 @@ const eventJsonLd = {
     justify-content: center;
   }
 
-  .lineup-bottom {
-    margin-top: 24px;
+  .timetable-shell {
+    background-color: var(--white);
+    padding-top: 42px;
+    padding-bottom: 36px;
+  }
+
+  .timetable-top {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 24px;
     align-items: end;
+    margin-bottom: 24px;
   }
 
-  .lineup-note {
-    margin: 0;
-    color: var(--white);
-    font-size: 1rem;
-    line-height: 1.75;
-    max-width: 760px;
+  .timetable-kicker {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--red);
   }
 
-  .lineup-actions {
+  .timetable-top h2 {
+    font-family: "Herderrock Impact", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--primary-gray);
+  }
+
+  .timetable-live-panel {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary-gray);
   }
 
-  .lineup-actions a {
+  .timetable-doors,
+  .timetable-status {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 14px 20px;
-    border: 2px solid var(--white);
-    background-color: transparent;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 2px solid var(--primary-gray);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.74rem;
+  }
+
+  .timetable-status {
     color: var(--white);
-    text-decoration: none;
+    background-color: var(--primary-gray);
+  }
+
+  .timetable-now-button {
+    min-height: 42px;
+    padding: 0 16px;
+    border: 2px solid var(--black);
+    background-color: var(--red);
+    color: var(--white);
+    font: inherit;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
     transition:
       transform 0.2s ease,
       background-color 0.2s ease,
       color 0.2s ease;
   }
 
-  .lineup-actions a:hover {
+  .timetable-now-button:hover,
+  .timetable-now-button:focus-visible {
     transform: translateY(-2px);
-    background-color: var(--white);
-    color: var(--red);
+    background-color: var(--primary-gray);
+    outline: none;
+  }
+
+  .timetable-now-button:disabled {
+    cursor: default;
+    opacity: 0.58;
+    transform: none;
+  }
+
+  .timetable-board {
+    --minute-height: 3.05px;
+    --schedule-pad-y: 48px;
+    border: 3px solid var(--primary-gray);
+    background:
+      linear-gradient(90deg, rgba(25, 32, 59, 0.08) 0 82px, transparent 82px),
+      var(--white);
+  }
+
+  .timetable-scroll {
+    max-height: min(620px, 72vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: var(--red) rgba(25, 32, 59, 0.14);
+    scrollbar-width: thin;
+  }
+
+  .timetable-scroll::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .timetable-scroll::-webkit-scrollbar-track {
+    background-color: rgba(25, 32, 59, 0.14);
+  }
+
+  .timetable-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--red);
+    border: 2px solid var(--white);
+  }
+
+  .timetable-grid {
+    position: relative;
+    min-height: calc((var(--total-minutes) * var(--minute-height)) + (var(--schedule-pad-y) * 2));
+    padding-left: 96px;
+  }
+
+  .timetable-tick {
+    position: absolute;
+    top: calc(var(--schedule-pad-y) + (var(--tick-minute) * var(--minute-height)));
+    left: 0;
+    right: 0;
+    min-height: 1px;
+    border-top: 1px solid rgba(25, 32, 59, 0.18);
+  }
+
+  .timetable-tick span {
+    position: absolute;
+    top: -0.72em;
+    left: 16px;
+    width: 54px;
+    color: var(--primary-gray);
+    font-weight: 900;
+    font-size: 0.78rem;
+    text-align: right;
+  }
+
+  .timetable-act {
+    position: absolute;
+    top: calc(var(--schedule-pad-y) + (var(--act-start) * var(--minute-height)) + 12px);
+    left: 96px;
+    right: 16px;
+    min-height: 96px;
+    height: max(96px, calc(var(--act-duration) * var(--minute-height) - 16px));
+    display: grid;
+    grid-template-columns: minmax(112px, 0.22fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    border: 2px solid var(--primary-gray);
+    background-color: var(--primary-gray);
+    color: var(--white);
+    text-decoration: none;
+    box-shadow: 0 8px 0 rgba(237, 28, 36, 0.22);
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .timetable-act:hover,
+  .timetable-act:focus-visible {
+    transform: translateX(6px);
+    background-color: var(--red);
+    box-shadow: 0 8px 0 rgba(25, 32, 59, 0.18);
+    outline: none;
+  }
+
+  .timetable-act-headliner {
+    background-color: var(--red);
+    border-color: var(--black);
+  }
+
+  .timetable-act.is-active {
+    background-color: var(--red);
+    outline: 3px solid var(--white);
+    outline-offset: -8px;
+  }
+
+  .timetable-act-time {
+    font-weight: 900;
+    font-size: 0.92rem;
+  }
+
+  .timetable-act strong {
+    color: var(--white);
+    font-family: "Herderrock Impact", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.7rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  .timetable-act span:last-child {
+    justify-self: end;
+    padding: 6px 10px;
+    border: 1px solid rgba(249, 238, 213, 0.62);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    font-weight: 900;
+  }
+
+  .timetable-now-line {
+    position: absolute;
+    top: calc(var(--schedule-pad-y) + (var(--now-offset, 0) * var(--minute-height)));
+    left: 82px;
+    right: 0;
+    z-index: 5;
+    border-top: 3px solid var(--red);
+    pointer-events: none;
+  }
+
+  .timetable-now-line span {
+    position: absolute;
+    top: -16px;
+    left: -54px;
+    min-width: 42px;
+    padding: 5px 8px;
+    background-color: var(--red);
+    color: var(--white);
+    border: 2px solid var(--black);
+    font-weight: 900;
+    font-size: 0.72rem;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   @keyframes featuredFrameIn {
@@ -798,15 +1055,20 @@ const eventJsonLd = {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .lineup-bottom {
+    .timetable-top {
       grid-template-columns: 1fr;
       align-items: start;
+    }
+
+    .timetable-live-panel {
+      justify-content: flex-start;
     }
   }
 
   @media only screen and (max-width: 768px) {
     .featured-band-shell,
-    .lineup-shell {
+    .lineup-shell,
+    .timetable-shell {
       padding-left: 12px;
       padding-right: 12px;
     }
@@ -833,11 +1095,20 @@ const eventJsonLd = {
       margin-top: 16px;
     }
 
+    .featured-band-card-news .featured-band-links {
+      flex-direction: row;
+    }
+
     .featured-band-links a {
       width: 100%;
       padding: 13px 14px;
       font-size: 0.98rem;
       box-sizing: border-box;
+    }
+
+    .featured-band-card-news .featured-band-links a {
+      width: auto;
+      flex: 1 1 145px;
     }
 
     .featured-band-mist-left {
@@ -903,8 +1174,7 @@ const eventJsonLd = {
       margin-bottom: 14px;
     }
 
-    .lineup-intro p,
-    .lineup-note {
+    .lineup-intro p {
       font-size: 0.98rem;
       line-height: 1.65;
     }
@@ -924,15 +1194,6 @@ const eventJsonLd = {
       padding: 14px;
     }
 
-    .lineup-actions {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .lineup-actions a {
-      width: 100%;
-    }
-
     .lineup-shell::before {
       width: 24vw;
       left: -6%;
@@ -944,6 +1205,99 @@ const eventJsonLd = {
       right: -6%;
       top: -2%;
     }
+
+    .timetable-shell {
+      padding: 36px 14px 30px;
+    }
+
+    .timetable-top {
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .timetable-top h2 {
+      font-size: clamp(2.4rem, 13vw, 4rem);
+    }
+
+    .timetable-live-panel {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .timetable-doors,
+    .timetable-status,
+    .timetable-now-button {
+      justify-content: center;
+      min-height: 40px;
+      padding-left: 8px;
+      padding-right: 8px;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+
+    .timetable-status {
+      grid-column: 1 / -1;
+      order: 3;
+    }
+
+    .timetable-board {
+      --minute-height: 3px;
+      --schedule-pad-y: 46px;
+      border-width: 2px;
+      background:
+        linear-gradient(90deg, rgba(25, 32, 59, 0.08) 0 64px, transparent 64px),
+        var(--white);
+    }
+
+    .timetable-scroll {
+      max-height: 68vh;
+    }
+
+    .timetable-grid {
+      padding-left: 72px;
+    }
+
+    .timetable-tick span {
+      left: 6px;
+      width: 46px;
+      font-size: 0.7rem;
+    }
+
+    .timetable-act {
+      left: 72px;
+      right: 8px;
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 8px;
+      padding: 15px;
+      min-height: 116px;
+    }
+
+    .timetable-act:hover,
+    .timetable-act:focus-visible {
+      transform: translateY(-2px);
+    }
+
+    .timetable-act strong {
+      font-size: clamp(1.42rem, 7.2vw, 2.35rem);
+    }
+
+    .timetable-act span:last-child {
+      justify-self: start;
+      padding: 4px 8px;
+      font-size: 0.66rem;
+    }
+
+    .timetable-now-line {
+      left: 62px;
+    }
+
+    .timetable-now-line span {
+      left: -48px;
+      min-width: 38px;
+    }
   }
 </style>
 
@@ -952,37 +1306,150 @@ const eventJsonLd = {
     const aftermovieWrap = document.querySelector(".aftermovie-video-wrap");
     const aftermovieVideo = document.querySelector(".aftermovie-video");
 
-    if (!(aftermovieWrap instanceof HTMLDivElement) || !(aftermovieVideo instanceof HTMLVideoElement)) {
+    if (aftermovieWrap instanceof HTMLDivElement && aftermovieVideo instanceof HTMLVideoElement) {
+      const togglePlayback = async (isVisible: boolean) => {
+        if (isVisible) {
+          try {
+            await aftermovieVideo.play();
+          } catch (_error) {
+          }
+          return;
+        }
+
+        aftermovieVideo.pause();
+      };
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          togglePlayback(entry?.isIntersecting && entry.intersectionRatio >= 0.45);
+        },
+        {
+          threshold: [0.45, 0.6],
+        },
+      );
+
+      observer.observe(aftermovieWrap);
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          aftermovieVideo.pause();
+        }
+      });
+    }
+
+    const schedule = document.querySelector("[data-schedule]");
+
+    if (!(schedule instanceof HTMLElement)) {
       return;
     }
 
-    const togglePlayback = async (isVisible: boolean) => {
-      if (isVisible) {
-        try {
-          await aftermovieVideo.play();
-        } catch (_error) {
+    const scheduleScroll = schedule.querySelector("[data-schedule-scroll]");
+    const nowLine = schedule.querySelector("[data-now-line]");
+    const status = document.querySelector("[data-schedule-status]");
+    const scrollNowButton = document.querySelector("[data-scroll-now]");
+    const acts = Array.from(schedule.querySelectorAll("[data-act-start][data-act-end]"));
+    const startTime = Date.parse(schedule.dataset.start ?? "");
+    const endTime = Date.parse(schedule.dataset.end ?? "");
+    const totalMinutes = Number(schedule.dataset.totalMinutes ?? 0);
+    const timeFormatter = new Intl.DateTimeFormat("nl-BE", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Europe/Brussels",
+    });
+
+    const getMinuteHeight = () => {
+      const value = window.getComputedStyle(schedule).getPropertyValue("--minute-height");
+      return Number.parseFloat(value) || 3.05;
+    };
+
+    const getSchedulePadding = () => {
+      const value = window.getComputedStyle(schedule).getPropertyValue("--schedule-pad-y");
+      return Number.parseFloat(value) || 0;
+    };
+
+    const getCurrentTime = () => {
+      const testNow = new URLSearchParams(window.location.search).get("timetableNow");
+      const parsedTestNow = Date.parse((testNow ?? "").replace(" ", "+"));
+
+      return Number.isFinite(parsedTestNow) ? parsedTestNow : Date.now();
+    };
+
+    const setStatus = (message: string) => {
+      if (status instanceof HTMLElement) {
+        status.textContent = message;
+      }
+    };
+
+    const updateSchedule = () => {
+      if (!Number.isFinite(startTime) || !Number.isFinite(endTime) || totalMinutes <= 0) {
+        return false;
+      }
+
+      const now = getCurrentTime();
+      const currentMinute = (now - startTime) / 60000;
+      const clampedMinute = Math.min(Math.max(currentMinute, 0), totalMinutes);
+      const isLive = now >= startTime && now <= endTime;
+
+      schedule.style.setProperty("--now-offset", String(clampedMinute));
+
+      if (nowLine instanceof HTMLElement) {
+        nowLine.hidden = !isLive;
+      }
+
+      if (scrollNowButton instanceof HTMLButtonElement) {
+        scrollNowButton.disabled = !isLive;
+      }
+
+      acts.forEach((act) => {
+        if (!(act instanceof HTMLElement)) {
+          return;
         }
+
+        const actStart = Date.parse(act.dataset.actStart ?? "");
+        const actEnd = Date.parse(act.dataset.actEnd ?? "");
+        act.classList.toggle("is-active", now >= actStart && now < actEnd);
+      });
+
+      if (isLive) {
+        setStatus(`Nu ${timeFormatter.format(new Date(now))}`);
+        return true;
+      }
+
+      if (now < startTime) {
+        setStatus("Live vanaf 16:00");
+        return false;
+      }
+
+      setStatus("Afgelopen om 04:00");
+      return false;
+    };
+
+    const scrollToNow = () => {
+      if (!(scheduleScroll instanceof HTMLElement)) {
         return;
       }
 
-      aftermovieVideo.pause();
+      updateSchedule();
+      const currentMinute = Number.parseFloat(
+        schedule.style.getPropertyValue("--now-offset") || "0",
+      );
+      const targetTop = getSchedulePadding() + currentMinute * getMinuteHeight();
+
+      scheduleScroll.scrollTo({
+        top: Math.max(targetTop - scheduleScroll.clientHeight * 0.46, 0),
+        behavior: "smooth",
+      });
     };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        togglePlayback(entry?.isIntersecting && entry.intersectionRatio >= 0.45);
-      },
-      {
-        threshold: [0.45, 0.6],
-      },
-    );
+    const isLiveOnLoad = updateSchedule();
+    window.setInterval(updateSchedule, 30000);
 
-    observer.observe(aftermovieWrap);
+    if (scrollNowButton instanceof HTMLButtonElement) {
+      scrollNowButton.addEventListener("click", scrollToNow);
+    }
 
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        aftermovieVideo.pause();
-      }
-    });
+    if (isLiveOnLoad) {
+      window.setTimeout(scrollToNow, 350);
+    }
   });
 </script>
