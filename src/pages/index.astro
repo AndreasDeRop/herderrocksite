@@ -102,7 +102,8 @@ const nextEditionJsonLd = {
   .film-darkness { position: absolute; inset: 0; background: var(--black); opacity: calc(1 - var(--reveal)); pointer-events: none; }
   .film-frame { position: absolute; inset: 0; background: var(--black); overflow: hidden; transform: scale(calc(1 - var(--reveal) * .085)) rotate(calc(var(--reveal) * -1deg)); transform-origin: center; }
   .film-poster, .film-poster img, video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  video { display: block; }
+  video { display: block; opacity: 0; transition: opacity .2s ease-out; }
+  video[data-playing="true"] { opacity: 1; }
   .film-footnote { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 3.5vw; background: linear-gradient(to top, #11110ef2, #11110e00); display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 66px; font-size: .68rem; font-weight: 700; letter-spacing: .08em; }
   .film-footnote > a { display: flex; align-items: center; gap: 12px; min-height: 44px; }
   .film-byline { display: flex; align-items: center; gap: 12px; }
@@ -200,33 +201,71 @@ const nextEditionJsonLd = {
     const sourceForViewport = (format = supportsWebM ? "webm" : "mp4") =>
       `/videos/2026/aftermovie-${mobileFilm.matches ? "mobile" : "desktop"}-cut.${format}`;
     let isVisible = false;
+    let hasStarted = false;
+    let playPending = false;
     film.muted = true;
     film.src = sourceForViewport();
+    const hasStartupBuffer = () => {
+      for (let i = 0; i < film.buffered.length; i++) {
+        if (film.buffered.start(i) <= film.currentTime && film.buffered.end(i) > film.currentTime) {
+          const remaining = film.duration - film.currentTime;
+          return film.buffered.end(i) - film.currentTime >= Math.min(2, remaining - .05);
+        }
+      }
+      return false;
+    };
     const maybePlay = () => {
       const usePoster = reducedMotion.matches || Boolean(connection?.saveData);
       film.hidden = usePoster;
-      if (isVisible && !document.hidden && !usePoster) {
-        void film.play().catch((playError: DOMException) => {
-          // A scroll pause or source switch can interrupt a pending play request.
-          if (playError.name !== "AbortError") film.hidden = true;
-        });
-      } else film.pause();
+      if (!isVisible || document.hidden || usePoster) {
+        film.pause();
+        return;
+      }
+      // Load only the selected viewport source, with room to buffer before playback.
+      if (film.preload !== "auto") {
+        film.preload = "auto";
+        film.load();
+        return;
+      }
+      if (film.readyState < HTMLMediaElement.HAVE_FUTURE_DATA || film.seeking || playPending || !film.paused) return;
+      // Some browsers cap preloading; don't leave their poster waiting indefinitely.
+      if (!hasStarted && !hasStartupBuffer() && film.networkState !== HTMLMediaElement.NETWORK_IDLE) return;
+      playPending = true;
+      const source = film.src;
+      void film.play().catch((playError: DOMException) => {
+        if (film.src === source && playError.name !== "AbortError") film.hidden = true;
+      }).finally(() => {
+        if (film.src === source) playPending = false;
+      });
     };
-    mobileFilm.addEventListener("change", () => {
+    film.addEventListener("playing", () => {
+      hasStarted = true;
+      film.dataset.playing = "true";
+    });
+    for (const event of ["loadeddata", "canplay", "progress", "suspend", "seeked"]) {
+      film.addEventListener(event, maybePlay);
+    }
+    const changeSource = (source: string) => {
       const time = film.currentTime;
+      film.pause();
+      hasStarted = false;
+      playPending = false;
+      delete film.dataset.playing;
+      film.preload = "none";
       film.onloadedmetadata = () => {
-        film.currentTime = Math.min(time, film.duration);
+        if (time > 0) film.currentTime = Math.min(time, Math.max(0, film.duration - .05));
         maybePlay();
       };
+      film.src = source;
+      maybePlay();
+    };
+    mobileFilm.addEventListener("change", () => {
       error.hidden = true;
-      film.src = sourceForViewport();
-      film.load();
+      changeSource(sourceForViewport());
     });
     const showError = () => {
       if (film.src.endsWith(".webm")) {
-        film.src = sourceForViewport("mp4");
-        film.load();
-        maybePlay();
+        changeSource(sourceForViewport("mp4"));
       } else {
         error.hidden = false;
         film.hidden = true;

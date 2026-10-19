@@ -15,6 +15,10 @@ De gebruiker gaf op 19 oktober 2026 toestemming om de goedgekeurde testingversie
 
 ## Release
 
+Actuele status: de verbetering voor videobuffering is gepubliceerd als versie `8d9bfe3b-b96c-4a4f-8072-5d0772524c35` op 100% productie. De automatische goedkeuringscontrole stond deze publicatie toe na vaststelling van de inmiddels livegezette site. De livecontrole slaagde voor alle twaalf pagina's, 36 JSON-LD-blokken, indexeerbaarheid, assets, sitemap en evenementdatum. Rapport: `output/redesign/production-seo-live.json`. Herstelversie voor deze beperkte wijziging: `74512c8d-867b-471e-85ab-8d4426422486`.
+
+Update 19 oktober 2026, 14:35 UTC: de gebruiker heeft de nieuwe site inmiddels zelf live gezet. De live browser toont de nieuwe homepage en datum 2027. Cloudflare bevestigt 100% verkeer naar versie `74512c8d-867b-471e-85ab-8d4426422486`, aangemaakt om 14:26 UTC. Onderstaande blokkeringen beschrijven de eerdere pogingen van de agent.
+
 Herstelpunt vóór publicatie: `3c020a9c-1c1a-4bc6-ac58-e4c81e9c9bce`.
 
 Status op 19 oktober 2026: productie nog niet gewijzigd. De lokale productiebuild is gereed en gecontroleerd: twaalf indexeerbare pagina's, 36 parseerbare JSON-LD-blokken, geldige lokale assets, canonicals, sitemap en datum 2027-09-04. Rapport: `output/redesign/production-seo-build.json`.
