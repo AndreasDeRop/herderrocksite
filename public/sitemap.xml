@@ -3,13 +3,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://herderrock.be/</loc>
-    <lastmod>2026-10-19T14:33:02Z</lastmod>
+    <lastmod>2026-10-19T14:46:43Z</lastmod>
     <video:video>
       <video:thumbnail_loc>https://herderrock.be/visuals/aftermovie-2026-desktop.webp</video:thumbnail_loc>
       <video:title>Herderrock 2026: officiële aftermovie</video:title>
       <video:description>Herbeleef het cosy muziekfestival in Herdersem (Aalst) op 5 september 2026. Aftermovie door @emvlstudio.</video:description>
       <video:content_loc>https://herderrock.be/videos/2026/aftermovie-desktop-cut.webm</video:content_loc>
       <video:duration>44</video:duration>
+      <video:publication_date>2026-10-19T14:26:35Z</video:publication_date>
     </video:video>
     <image:image><image:loc>https://herderrock.be/visuals/herderrock-2026-foto-publiek.webp</image:loc></image:image>
     <image:image><image:loc>https://herderrock.be/visuals/herderrock-2026-foto-poeslief.webp</image:loc></image:image>

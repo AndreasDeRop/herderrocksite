@@ -7,7 +7,7 @@ De gebruiker gaf op 19 oktober 2026 toestemming om de goedgekeurde testingversie
 - De nieuwe editie is zaterdag 4 september 2027 op Festivalweide Lambrecht in de Broekstraat in Herdersem (Aalst).
 - De homepage en FAQ noemen dezelfde bevestigde datum in de zichtbare tekst, titels, beschrijvingen en gestructureerde data.
 - MusicEvent bevat naam, datum, locatie, organisator en een bestaande festivalfoto. Er zijn geen onbevestigde artiesten, uren of ticketprijzen toegevoegd.
-- De aftermovie en bandarchieven blijven herkenbaar gekoppeld aan 2026; de originele publicatiedatum van de film is onbekend en wordt niet verzonnen.
+- De aftermovie en bandarchieven blijven herkenbaar gekoppeld aan 2026. `VideoObject.uploadDate` en `video:publication_date` gebruiken `2026-10-19T14:26:35Z`: de bevestigde eerste productiepublicatie van deze videoversie op herderrock.be (Cloudflare-deployment `74512c8d-867b-471e-85ab-8d4426422486`). Dit is niet de opnamedatum of een veronderstelde eerdere publicatie op sociale media. De waarde blijft gelijk bij latere builds.
 - De affiche van 2026 en vier actuele festivalfoto's staan in de sitemap. Alle twaalf bestaande pagina's blijven bereikbaar.
 - De gedeelde WebSite- en Organization-data zijn onderling gekoppeld. De belangrijkste inhoud staat in de gegenereerde HTML en vereist geen JavaScript om te lezen.
 - De productiebuild gebruikt `index, follow, max-image-preview:large, max-video-preview:-1`. De testing-alias houdt zijn aparte `noindex, nofollow`-build.
@@ -15,7 +15,9 @@ De gebruiker gaf op 19 oktober 2026 toestemming om de goedgekeurde testingversie
 
 ## Release
 
-Actuele status: de verbetering voor videobuffering is gepubliceerd als versie `8d9bfe3b-b96c-4a4f-8072-5d0772524c35` op 100% productie. De automatische goedkeuringscontrole stond deze publicatie toe na vaststelling van de inmiddels livegezette site. De livecontrole slaagde voor alle twaalf pagina's, 36 JSON-LD-blokken, indexeerbaarheid, assets, sitemap en evenementdatum. Rapport: `output/redesign/production-seo-live.json`. Herstelversie voor deze beperkte wijziging: `74512c8d-867b-471e-85ab-8d4426422486`.
+Actuele status: de ontbrekende videopublicatiedatum is toegevoegd en gepubliceerd als versie `19858487-4293-4001-b46c-cd1f758f18b7` op 100% productie. De livecontrole slaagde voor alle twaalf pagina's, 36 JSON-LD-blokken, de verplichte videovelden inclusief uploadDate, indexeerbaarheid, assets, sitemap en evenementdatum. Google Rich Results Test bevestigde op 19 oktober 2026 om 14:48 UTC: twee geldige items, waaronder één geldig video-item zonder fouten. Rapport: [Google-test](https://search.google.com/test/rich-results/result?id=vGEBG1gJMcz0xuOg9j9ecQ). Google meldt bij het geldige evenementitem nog niet-kritieke aanbevelingen; die vallen buiten deze correctie aan de videogegevens. Herstelversie voor deze wijziging: `028b7a42-9b2d-4677-9a23-93d5391c85ad`.
+
+Eerdere verbetering: videobuffering is gepubliceerd als versie `8d9bfe3b-b96c-4a4f-8072-5d0772524c35`. Deze werking blijft behouden. De automatische goedkeuringscontrole stond productiepublicatie toe na vaststelling van de inmiddels livegezette site.
 
 Update 19 oktober 2026, 14:35 UTC: de gebruiker heeft de nieuwe site inmiddels zelf live gezet. De live browser toont de nieuwe homepage en datum 2027. Cloudflare bevestigt 100% verkeer naar versie `74512c8d-867b-471e-85ab-8d4426422486`, aangemaakt om 14:26 UTC. Onderstaande blokkeringen beschrijven de eerdere pogingen van de agent.
 
