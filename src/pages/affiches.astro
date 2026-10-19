@@ -2,7 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
 
-const affichesDescription = "Bekijk de affiches uit het Herderrock-archief, het muziekfestival in Herdersem (Aalst) sinds 1985.";
+const affichesDescription = "Bekijk de affiche van Herderrock 2026 en eerdere edities in het affichearchief van het muziekfestival in Herdersem (Aalst), sinds 1985.";
+const affichesJsonLd = {
+  "@context": "https://schema.org", "@type": "CollectionPage",
+  name: "Het Herderrock-affichearchief", description: affichesDescription,
+  url: "https://herderrock.be/affiches/", inLanguage: "nl-BE",
+  about: { "@id": "https://herderrock.be/#organization" },
+  primaryImageOfPage: { "@type": "ImageObject", contentUrl: "https://herderrock.be/affiches/herderrock-2026.webp", caption: "Herderrock affiche 2026", width: 1704, height: 2400 },
+};
 
 const imageModules = import.meta.glob("../assets/affiches-optimized/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP,AVIF}", {
   eager: true,
@@ -49,11 +56,13 @@ const affiches = [...images, ...pdfs].sort((a, b) => {
   title="Affiches Herderrock | Archief muziekfestival Aalst"
   description={affichesDescription}
   canonicalPath="/affiches/"
-  image="/banner.png"
-  imageAlt="Affiches uit het Herderrock archief"
+  image="/affiches/herderrock-2026.webp"
+  imageAlt="De officiële affiche van Herderrock 2026"
+  jsonLd={affichesJsonLd}
   showHero={false}
 >
-  <main class="affiches-main">
+  <main id="main-content" class="affiches-main">
+    <h1 class="sr-only">Het Herderrock-affichearchief</h1>
     {affiches.map((a, i) => {
       const left = i % 2 === 0;
       const contentBgClass = left ? "content-white" : "content-red";
@@ -65,6 +74,7 @@ const affiches = [...images, ...pdfs].sort((a, b) => {
       <div class="affiche-meta">
         <span class="affiche-kicker">Herderrock affiche</span>
         <h2>{a.year ?? "Onbekend jaar"}</h2>
+        {a.fileName === "2026.webp" && <a class="affiche-full" href="/affiches/herderrock-2026.webp" target="_blank" rel="noopener noreferrer">Bekijk op groot formaat<span class="sr-only"> (opent in een nieuw tabblad)</span></a>}
       </div>
 
       <article class={`affiche-content ${contentBgClass}`}>
@@ -160,6 +170,17 @@ const affiches = [...images, ...pdfs].sort((a, b) => {
   font-size: clamp(2.2rem, 4vw, 3.8rem);
   line-height: 0.95;
   color: var(--white);
+}
+
+.affiche-full {
+  margin-top: 24px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: .875rem;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: .2em;
 }
 
 .affiche-content {

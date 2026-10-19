@@ -1,10 +1,11 @@
 ---
 interface Props {
   title?: string;
+  titleHref?: string;
   showTitle?: boolean;
 }
 
-const { title, showTitle = Boolean(Astro.props.title) } = Astro.props;
+const { title, titleHref, showTitle = Boolean(Astro.props.title) } = Astro.props;
 
 const vipSponsors = [
   {
@@ -52,7 +53,7 @@ const vipSponsors = [
   <div class="vip-shell padding-x">
     {showTitle && title && (
       <div class="vip-header">
-        <h2>{title}</h2>
+        <h2>{titleHref ? <a href={titleHref}>{title}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></a> : title}</h2>
       </div>
     )}
 
@@ -112,6 +113,19 @@ const vipSponsors = [
     justify-content: center;
     gap: 16px;
   }
+
+  .vip-header h2 a {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 44px;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: .12em;
+  }
+
+  .vip-header h2 a:hover { color: var(--red); }
+  .vip-header h2 svg { width: .5em; height: .5em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 
   .vip-highlight > a {
     flex: 0 1 calc((100% - 48px) / 4);

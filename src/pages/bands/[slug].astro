@@ -12,50 +12,14 @@ export function getStaticPaths() {
 const { act } = Astro.props as { act: LineupAct };
 const siteUrl = "https://herderrock.be";
 const bandUrl = `${siteUrl}/bands/${act.slug}/`;
-const performanceLabel = act.scheduleMeta ?? act.meta;
-const bandDescription = `${act.name} op Herderrock 2026: ${act.schedule.label}. ${
+const bandDescription = `${act.name} op Herderrock 2026: archief. ${
   act.tagline ? `${act.tagline}. ` : ""
 }${act.intro}`;
-const bandJsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "MusicGroup",
-    name: act.name,
-    image: new URL(act.image, siteUrl).toString(),
-    url: bandUrl,
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "MusicEvent",
-    name: `${act.name} op Herderrock 2026`,
-    startDate: act.schedule.startIso,
-    endDate: act.schedule.endIso,
-    url: bandUrl,
-    image: [new URL(act.image, siteUrl).toString()],
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    eventStatus: "https://schema.org/EventScheduled",
-    location: {
-      "@type": "Place",
-      name: "Festivalweide Lambrecht",
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: "Broekstraat",
-        addressLocality: "Herdersem",
-        postalCode: "9310",
-        addressRegion: "Aalst",
-        addressCountry: "BE",
-      },
-    },
-    performer: {
-      "@type": "MusicGroup",
-      name: act.name,
-    },
-  },
-];
+const bandJsonLd = { "@context": "https://schema.org", "@type": "WebPage", name: `${act.name}: archief Herderrock 2026`, url: bandUrl, description: bandDescription, about: { "@type": "MusicGroup", name: act.name, image: new URL(act.image, siteUrl).toString() } };
 ---
 
 <Layout
-  title={`${act.name} | Herderrock 2026`}
+  title={`${act.name} | Archief Herderrock 2026`}
   description={bandDescription}
   canonicalPath={`/bands/${act.slug}/`}
   image={act.image}
@@ -63,13 +27,10 @@ const bandJsonLd = [
   showHero={false}
   jsonLd={bandJsonLd}
 >
-  <main class="band-page">
+  <main id="main-content" class="band-page">
     <section class="band-hero padding-x">
       <div class="band-back-links">
-        <a class="band-back-link" href="/#line-up">Terug naar line-up</a>
-        <a class="band-back-link band-back-link-timetable" href="/#timetable">
-          Keer terug naar timetable
-        </a>
+        <a class="band-back-link" href="/#herbeleef">Terug naar de terugblik</a>
       </div>
 
       <div class="band-hero-grid">
@@ -78,14 +39,11 @@ const bandJsonLd = [
         </div>
 
         <div class="band-hero-copy">
-          <span class="band-kicker">Herderrock 2026</span>
+          <span class="band-kicker">Archief · Herderrock 2026</span>
           <h1>{act.name}</h1>
           <p>{act.intro}</p>
 
-          <div class="band-time-panel">
-            <span>{act.schedule.label}</span>
-            <strong>{performanceLabel}</strong>
-          </div>
+          <div class="band-time-panel"><p>Dit is een artiestenpagina uit editie 2026. De volgende line-up komt binnenkort.</p></div>
         </div>
       </div>
     </section>
@@ -101,7 +59,7 @@ const bandJsonLd = [
           {act.description.map((paragraph) => <p>{paragraph}</p>)}
 
           <div class="band-actions">
-            <a href="/#timetable">Timetable</a>
+            <a href="/#aftermovie">Aftermovie 2026</a>
             {
               act.listenUrl && (
                 <a
@@ -114,14 +72,7 @@ const bandJsonLd = [
                 </a>
               )
             }
-            <a
-              class="ticket-action"
-              href="https://herderrock.eventsquare.store/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Koop tickets
-            </a>
+
           </div>
         </div>
       </div>

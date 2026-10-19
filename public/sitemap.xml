@@ -1,27 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- Alleen canonieke productie-URL's. Testversies gebruiken noindex. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://herderrock.be/</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+    <video:video>
+      <video:thumbnail_loc>https://herderrock.be/visuals/aftermovie-2026-desktop.webp</video:thumbnail_loc>
+      <video:title>Herderrock 2026: officiële aftermovie</video:title>
+      <video:description>Herbeleef het cosy muziekfestival in Herdersem (Aalst) op 5 september 2026. Aftermovie door @emvlstudio.</video:description>
+      <video:content_loc>https://herderrock.be/videos/2026/aftermovie-desktop-cut.webm</video:content_loc>
+      <video:duration>44</video:duration>
+    </video:video>
+    <image:image><image:loc>https://herderrock.be/visuals/herderrock-2026-foto-publiek.webp</image:loc></image:image>
+    <image:image><image:loc>https://herderrock.be/visuals/herderrock-2026-foto-poeslief.webp</image:loc></image:image>
+    <image:image><image:loc>https://herderrock.be/visuals/herderrock-2026-foto-sfeer.webp</image:loc></image:image>
+    <image:image><image:loc>https://herderrock.be/visuals/herderrock-2026-foto-tijs-vanneste.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://herderrock.be/faq/</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
   </url>
   <url>
     <loc>https://herderrock.be/sponsors/</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
   </url>
   <url>
     <loc>https://herderrock.be/affiches/</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+    <image:image><image:loc>https://herderrock.be/affiches/herderrock-2026.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/poeslief/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/sustain/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/ginos-eyeball/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/tijs-vanneste-tangled-horns/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/customs/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/dnsbr/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/fradri/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
+  </url>
+  <url>
+    <loc>https://herderrock.be/bands/dibbs/</loc>
+    <lastmod>2026-10-19T14:18:25Z</lastmod>
   </url>
 </urlset>

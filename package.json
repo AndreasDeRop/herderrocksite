@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
+    "build:testing": "astro check && astro build --mode testing",
     "preview": "astro preview",
     "astro": "astro"
   },

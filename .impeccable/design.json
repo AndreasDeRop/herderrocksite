@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T19:42:34.575Z",
+  "title": "Design System: Herderrock",
+  "extensions": {
+    "colorMeta": {
+      "red": {
+        "role": "primary",
+        "displayName": "Festivalrood"
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Warm crème"
+      },
+      "primary-gray": {
+        "role": "secondary",
+        "displayName": "Donkerblauw"
+      },
+      "black": {
+        "role": "neutral",
+        "displayName": "Filmzwart"
+      },
+      "red-copy": {
+        "role": "neutral",
+        "displayName": "Zwarte tekst op rood"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Herderrock Impact",
+        "purpose": "Compacte afficheletters in hoofdletters."
+      },
+      "body": {
+        "displayName": "Arial",
+        "purpose": "Lopende tekst en navigatielabels."
+      }
+    },
+    "motion": [
+      {
+        "name": "link-arrow",
+        "value": "transform .2s ease-out",
+        "purpose": "Pijl verschuift 4px bij hover; uit bij reduced motion."
+      },
+      {
+        "name": "film-reveal",
+        "value": "scale(1 → .915), rotate(0 → -1deg)",
+        "purpose": "Scrollgebonden filmtransformatie; uit bij reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "homepage-mobile-max",
+        "value": "767px"
+      },
+      {
+        "name": "sponsor-single-max",
+        "value": "768px"
+      },
+      {
+        "name": "sponsor-two-column-max",
+        "value": "992px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Tekstlink",
+      "kind": "custom",
+      "description": "Onderstreepte link met bewegende lijnpijl.",
+      "html": "<a class=\"ds-text-link\" href=\"/affiches/\">Duik in ons affichearchief <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
+      "css": ".ds-text-link{display:inline-flex;align-items:center;gap:18px;min-height:44px;padding:10px 0;margin-top:24px;font:700 .85rem Arial,sans-serif;border-bottom:1px solid currentColor;text-decoration:none;color:inherit}.ds-text-link svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease-out}.ds-text-link:hover svg{transform:translateX(4px)}.ds-text-link:focus-visible{outline:3px solid currentColor;outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-text-link svg{transition:none}}"
+    },
+    {
+      "name": "Menulink",
+      "kind": "nav",
+      "description": "Grote displaylink op de donkerblauwe menulaag.",
+      "html": "<nav class=\"ds-menu\" aria-label=\"Voorbeeldmenu\"><a href=\"#aftermovie\">Aftermovie</a></nav>",
+      "css": ".ds-menu{padding:24px;background:var(--primary-gray,#19203b);color:var(--white,#f9eed5)}.ds-menu a{display:block;font-family:var(--display-font,Impact,sans-serif);text-transform:uppercase;font-size:clamp(1.6rem,4.7vh,3rem);padding:8px 12px;text-align:center;color:inherit;text-decoration:none}.ds-menu a:hover{color:var(--red,#ed1c24)}.ds-menu a:focus-visible{outline:3px solid currentColor;outline-offset:5px}"
+    },
+    {
+      "name": "Affichezegel",
+      "kind": "button",
+      "description": "Schuine rode knop uit de geheime line-upaffiche; voorbeeld toont alleen de stijl.",
+      "html": "<button class=\"ds-seal\" type=\"button\">COMING SOON</button>",
+      "css": ".ds-seal{background:var(--red,#ed1c24);color:var(--white,#f9eed5);border:0;padding:15px;font-family:var(--display-font,Impact,sans-serif);font-weight:400;font-size:2.15rem;line-height:1;transform:rotate(-10deg);cursor:pointer;transition:transform .2s ease-out}.ds-seal:hover{transform:rotate(-7deg)}.ds-seal:focus-visible{outline:3px solid var(--primary-gray,#19203b);outline-offset:5px}@media(prefers-reduced-motion:reduce){.ds-seal{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "overview": "De bestaande Herderrock-identiteit combineert grote, compacte afficheletters met warme crèmevlakken, rood en donkerblauw. Echte festivalbeelden dragen de sfeer; het logo en de cosy beschrijving blijven herkenbaar. Deze registratie beschrijft de gedeelde vormtaal en de gerealiseerde homepage, geen nieuwe regels voor ongewijzigde archiefpagina's.",
+    "keyCharacteristics": [
+      "Grote hoofdletters en rustige Arial-leestekst.",
+      "Rechte vlakken, duidelijke kleurwissels en licht gedraaide foto- en affichekaders.",
+      "Echte beelden met zichtbare bronvermelding."
+    ],
+    "rules": [],
+    "dos": [
+      "Do behoud de bestaande kleuren, lokale displayletter en het logo.",
+      "Do gebruik echte festivalbeelden en behoud de bronvermelding.",
+      "Do gebruik zwarte kleine tekst op rode vlakken en behoud zichtbare focus."
+    ],
+    "donts": [
+      "Don't maak de homepagevolgorde tot een verplicht sjabloon voor iedere pagina.",
+      "Don't voeg nieuwe merkregels of een kleurschaal toe zonder een bevestigde aanleiding."
+    ]
+  }
+}

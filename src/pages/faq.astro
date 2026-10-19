@@ -1,10 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const faqDescription = "Praktische info over Herderrock, het muziekfestival in Herdersem (Aalst): tickets, parking, toegankelijkheid, openingsuren, veiligheid en het 3D-terreinplan.";
+const faqDescription = "Herderrock vindt plaats op zaterdag 4 september 2027 in Herdersem (Aalst). Lees de praktische info. Line-up en ticketinformatie volgen later.";
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": "https://herderrock.be/faq/#webpage",
+  url: "https://herderrock.be/faq/", inLanguage: "nl-BE",
+  name: "Praktische info over Herderrock 2027", description: faqDescription,
+  isPartOf: { "@id": "https://herderrock.be/#website" },
   mainEntity: [
     {
       "@type": "Question",
@@ -19,15 +23,15 @@ const faqJsonLd = {
       name: "Waar kan ik tickets kopen?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Tickets voor Herderrock koop je via de officiele ticketshop van Herderrock.",
+        text: "Herderrock 2026 is afgelopen. Ticketinformatie voor de volgende editie wordt later bekendgemaakt.",
       },
     },
     {
       "@type": "Question",
-      name: "Wanneer opent Herderrock?",
+      name: "Wanneer is de volgende editie?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "De deuren openen op zaterdag 5 september 2026 om 15:30. Het eerste optreden start om 16:00 en het festival sluit om 04:00 op zondag 6 september 2026.",
+        text: "De volgende editie van Herderrock vindt plaats op zaterdag 4 september 2027. De line-up en verdere praktische informatie worden later bekendgemaakt.",
       },
     },
     {
@@ -56,10 +60,10 @@ const faqJsonLd = {
     },
     {
       "@type": "Question",
-      name: "Kan ik het terrein op voorhand bekijken?",
+      name: "Kan ik het terrein van editie 2026 bekijken?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ja. In de FAQ staat een 3D-terreinplan van Herderrock 2026 waarmee bezoekers de festivalweide, inkom, bar, podium en praktische zones op voorhand kunnen bekijken.",
+        text: "Ja. Het 3D-terreinplan van editie 2026 blijft beschikbaar als terugblik. Het plan voor een volgende editie kan afwijken.",
       },
     },
   ],
@@ -67,15 +71,16 @@ const faqJsonLd = {
 ---
 
 <Layout
-  title="FAQ Herderrock | Praktische info muziekfestival Aalst"
+  title="Herderrock FAQ | 4 september 2027 in Herdersem"
   description={faqDescription}
   canonicalPath="/faq/"
-  image="/visuals/banner-main.webp"
+  image="/visuals/aftermovie-2026-desktop.webp"
   imageAlt="Praktische info voor Herderrock muziekfestival in Aalst"
   jsonLd={faqJsonLd}
 >
-  <main class="margin-top">
-    <h1 class="title title-left">FAQ</h1>
+  <main id="main-content" class="margin-top">
+    <h1 class="title title-left">Praktische info</h1>
+    <p class="edition-note">De volgende editie van Herderrock is op zaterdag <time datetime="2027-09-04">4 september 2027</time>. De line-up komt binnenkort. Onderstaande terrein- en bezoekersinformatie hoort bij editie 2026; verdere informatie voor 2027 volgt later.</p>
     <section class="faq padding-y padding-x">
       <div class="faq-item">
         <button class="faq-question">
@@ -139,13 +144,8 @@ const faqJsonLd = {
         </button>
         <div class="faq-answer">
           <p>
-            De prijs van een ticket hangt af van de verkoopgolf (wave) waarin je
-            je ticket bestelt. Tickets bestellen kan je <a
-              href="https://herderrock.eventsquare.store/"
-              target="_blank">hier</a
-            >.
+            De ticketprijzen voor de volgende editie worden later bekendgemaakt.
           </p>
-          <p>Voor kinderen onder de 12 jaar is toegang gratis.</p>
         </div>
       </div>
       <div class="faq-item">
@@ -155,42 +155,29 @@ const faqJsonLd = {
         </button>
         <div class="faq-answer">
           <p>
-            Tickets bestellen kan je
-            <a href="https://herderrock.eventsquare.store/" target="_blank"
-              >hier</a
-            >.
-
-            <br /><br /><strong style="color: var(--red);">LET OP:</strong>
-            <p>
-              Zorg ervoor dat je alleen tickets koopt via onze officiële
-              kanalen. Dit is de enige manier waarop we de authenticiteit van je
-              tickets kunnen verifiëren. Valse tickets geven geen toegang tot
-              het festival en kunnen niet worden omgeruild.
-            </p>
+            Herderrock 2026 is afgelopen. Zodra er nieuws is over tickets voor de volgende editie, vind je dat op deze website. Koop altijd via de officiële kanalen van Herderrock.
           </p>
         </div>
       </div>
       <div class="faq-item">
         <button class="faq-question">
-          <h3>Wat is de openingstijd?</h3>
+          <h3>Wanneer is de volgende editie?</h3>
           <span class="icon">+</span>
         </button>
         <div class="faq-answer">
           <p>
-            De deuren openen op zaterdag 5 september 2026 om 15:30. Het eerste optreden
-            start om 16:00 en het festival sluit om 04:00 op zondag 6 september 2026.
+            De volgende editie van Herderrock vindt plaats op zaterdag <time datetime="2027-09-04">4 september 2027</time>. De line-up en verdere praktische informatie worden later bekendgemaakt.
           </p>
         </div>
       </div>
       <div class="faq-item faq-item-terrain">
         <button class="faq-question">
-          <h3>Kan ik het terrein op voorhand bekijken?</h3>
+          <h3>Kan ik het terrein van editie 2026 bekijken?</h3>
           <span class="icon">+</span>
         </button>
         <div class="faq-answer">
           <p>
-            Ja. Via het 3D-terreinplan van Herderrock 2026 kan je de festivalweide,
-            inkom, bar, podium en praktische zones vooraf bekijken.
+            Bekijk hieronder het terreinplan van editie 2026. Dit blijft beschikbaar als terugblik; het plan voor een volgende editie kan afwijken.
           </p>
 
           <div class="terrain-viewer">
@@ -352,14 +339,14 @@ const faqJsonLd = {
         </button>
         <div class="faq-answer">
           <p>
-            Herderrock gaat in principe altijd door, ook bij regen – we zijn
+            Herderrock gaat in principe altijd door, ook bij regen. We zijn
             immers niet van suiker. ☔ Maar bij extreem weer (zoals een
             officiële code geel, oranje of rood van het KMI), nemen we geen
             risico’s. We volgen dan de officiële adviezen op en houden altijd de
             veiligheid van onze bezoekers, crew en artiesten voorop.<br /><br />
             Wat jij zelf kan doen als bezoeker:<br />
             Check altijd het weerbericht en onze communicatie vooraf. Voorzie waterdichte
-            kledij en stevige schoenen – geen paraplu’s (die kunnen gevaarlijk zijn
+            kledij en stevige schoenen. Gebruik geen paraplu’s (die kunnen gevaarlijk zijn
             bij wind). Breng eventueel een regenponcho mee. Respecteer altijd de
             instructies van de organisatie en de veiligheidsmensen.
           </p>
@@ -384,6 +371,7 @@ const faqJsonLd = {
 </Layout>
 
 <style>
+.edition-note { max-width: 1200px; margin: 24px auto 0; padding: 0 5%; line-height: 1.7; }
  main {
   background-color: var(--white);
 }
