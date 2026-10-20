@@ -45,15 +45,15 @@ const nextEditionJsonLd = {
           </picture>
           <video id="aftermovie-video" playsinline muted loop preload="none" disablepictureinpicture disableRemotePlayback
             aria-label="Officiële aftermovie Herderrock 2026, door emvlstudio">
+            <source media="(max-width: 767px)" src="/videos/2026/aftermovie-mobile-stream.mp4" type="video/mp4" />
             <source media="(max-width: 767px)" src="/videos/2026/aftermovie-mobile-cut.webm" type='video/webm; codecs="vp9"' />
-            <source media="(max-width: 767px)" src="/videos/2026/aftermovie-mobile-cut.mp4" type="video/mp4" />
             <source src="/videos/2026/aftermovie-desktop-cut.webm" type='video/webm; codecs="vp9"' />
             <source src="/videos/2026/aftermovie-desktop-cut.mp4" type="video/mp4" />
             Je browser ondersteunt deze video niet. <a href="/videos/2026/aftermovie-desktop-cut.mp4">Open de aftermovie.</a>
           </video>
         </div>
         <div class="film-footnote"><span class="film-byline"><a class="film-credit media-credit" href="https://www.instagram.com/emvlstudio/" target="_blank" rel="noopener noreferrer" aria-label="@emvlstudio op Instagram">@emvlstudio</a></span><a href="#herbeleef">Scroll & herbeleef <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v17m-6-6 6 6 6-6"/></svg></a></div>
-        <p class="film-error" hidden>De video kan niet worden afgespeeld. <a href="/videos/2026/aftermovie-desktop-cut.mp4">Open de aftermovie apart.</a></p>
+        <p class="film-error" hidden><span>De verbinding met de video is onderbroken.</span> <button type="button">Opnieuw proberen</button> <a href="/videos/2026/aftermovie-desktop-cut.mp4">Open de aftermovie apart.</a></p>
       </div>
     </section>
     <section id="herbeleef" class="memory-section">
@@ -113,7 +113,8 @@ const nextEditionJsonLd = {
   .film-section[data-revealed="true"] .film-footnote { background: var(--red); color: #000; }
   .film-credit { font-weight: 400; letter-spacing: 0; }
   .film-error { position: absolute; bottom: 85px; left: 5%; right: 5%; padding: 14px; background: var(--black); line-height: 1.5; }
-  .film-error a { text-decoration: underline; }
+  .film-error a, .film-error button { text-decoration: underline; text-underline-offset: .2em; }
+  .film-error button { background: transparent; color: inherit; border: 0; font: inherit; min-height: 44px; cursor: pointer; padding: 4px 8px; }
   .memory-section { padding: 70px 6vw 64px; color: var(--white); scroll-margin-top: 100px; }
   .memory-heading { display: flex; flex-direction: column; align-items: center; gap: 32px; max-width: 1400px; margin: 0 auto 70px; text-align: center; }
   h1 { font-size: clamp(4rem, 10vw, 8rem); line-height: .94; letter-spacing: -.025em; }
@@ -200,11 +201,19 @@ const nextEditionJsonLd = {
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
     const mobileFilm = window.matchMedia("(max-width: 767px)");
     const supportsWebM = Boolean(film.canPlayType('video/webm; codecs="vp9"'));
-    const sourceForViewport = (format = supportsWebM ? "webm" : "mp4") =>
-      `/videos/2026/aftermovie-${mobileFilm.matches ? "mobile" : "desktop"}-cut.${format}`;
+    const sourceForViewport = (format = mobileFilm.matches ? "mp4" : supportsWebM ? "webm" : "mp4") =>
+      mobileFilm.matches && format === "mp4" ? "/videos/2026/aftermovie-mobile-stream.mp4" :
+        `/videos/2026/aftermovie-${mobileFilm.matches ? "mobile" : "desktop"}-cut.${format}`;
     let isVisible = false;
     let hasStarted = false;
     let playPending = false;
+    let failed = false;
+    let generation = 0;
+    let retries = 0;
+    let triedAlternative = false;
+    let savedTime = 0;
+    let startTimer: ReturnType<typeof setTimeout> | undefined;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
     film.muted = true;
     film.src = sourceForViewport();
     const hasStartupBuffer = () => {
@@ -216,10 +225,12 @@ const nextEditionJsonLd = {
       }
       return false;
     };
-    const maybePlay = () => {
+    const maybePlay = (startWithoutPreload = false) => {
       const usePoster = reducedMotion.matches || Boolean(connection?.saveData);
-      film.hidden = usePoster;
-      if (!isVisible || document.hidden || usePoster) {
+      film.hidden = usePoster || failed;
+      if (!isVisible || document.hidden || usePoster || failed || retryTimer) {
+        clearTimeout(startTimer);
+        startTimer = undefined;
         film.pause();
         return;
       }
@@ -227,29 +238,48 @@ const nextEditionJsonLd = {
       if (film.preload !== "auto") {
         film.preload = "auto";
         film.load();
-        return;
       }
-      if (film.readyState < HTMLMediaElement.HAVE_FUTURE_DATA || film.seeking || playPending || !film.paused) return;
-      // Some browsers cap preloading; don't leave their poster waiting indefinitely.
-      if (!hasStarted && !hasStartupBuffer() && film.networkState !== HTMLMediaElement.NETWORK_IDLE) return;
+      // Mobile browsers may refuse to preload on cellular. A bounded play request
+      // starts their media loader instead of waiting forever for canplay/progress.
+      if (!hasStarted && !startTimer && !startWithoutPreload) {
+        startTimer = setTimeout(() => { startTimer = undefined; maybePlay(true); }, 2500);
+      }
+      if (film.seeking || playPending || !film.paused) return;
+      if (!startWithoutPreload && (film.readyState < HTMLMediaElement.HAVE_FUTURE_DATA ||
+          (!hasStarted && !hasStartupBuffer() && film.networkState !== HTMLMediaElement.NETWORK_IDLE))) return;
       playPending = true;
-      const source = film.src;
+      const currentGeneration = generation;
       void film.play().catch((playError: DOMException) => {
-        if (film.src === source && playError.name !== "AbortError") film.hidden = true;
+        if (generation !== currentGeneration || playError.name === "AbortError") return;
+        if (playError.name === "NotAllowedError") {
+          failed = true;
+          film.hidden = true;
+          error.querySelector("span")!.textContent = "Tik om de aftermovie te starten.";
+          error.hidden = false;
+        }
+        // Media loading/decoding errors are handled once by the error event.
       }).finally(() => {
-        if (film.src === source) playPending = false;
+        if (generation === currentGeneration) playPending = false;
       });
     };
     film.addEventListener("playing", () => {
       hasStarted = true;
       film.dataset.playing = "true";
+      error.hidden = true;
+      clearTimeout(startTimer);
+      startTimer = undefined;
     });
+    film.addEventListener("timeupdate", () => { if (!film.seeking && film.currentTime > 0) savedTime = film.currentTime; });
     for (const event of ["loadeddata", "canplay", "progress", "suspend", "seeked"]) {
-      film.addEventListener(event, maybePlay);
+      film.addEventListener(event, () => maybePlay());
     }
     const changeSource = (source: string) => {
-      const time = film.currentTime;
+      const time = savedTime;
+      generation++;
+      clearTimeout(startTimer);
+      startTimer = undefined;
       film.pause();
+      failed = false;
       hasStarted = false;
       playPending = false;
       delete film.dataset.playing;
@@ -259,27 +289,58 @@ const nextEditionJsonLd = {
         maybePlay();
       };
       film.src = source;
+      error.querySelector("a")!.href = sourceForViewport("mp4");
       maybePlay();
     };
     mobileFilm.addEventListener("change", () => {
+      clearTimeout(retryTimer);
+      retryTimer = undefined;
+      retries = 0;
+      triedAlternative = false;
       error.hidden = true;
       changeSource(sourceForViewport());
     });
     const showError = () => {
-      if (film.src.endsWith(".webm")) {
-        changeSource(sourceForViewport("mp4"));
+      if (retryTimer || failed) return;
+      clearTimeout(startTimer);
+      startTimer = undefined;
+      delete film.dataset.playing;
+      film.pause();
+      if ([3, 4].includes(film.error?.code ?? 0) && !triedAlternative) {
+        triedAlternative = true;
+        changeSource(sourceForViewport(film.src.endsWith(".webm") ? "mp4" : "webm"));
+      } else if (retries < 2) {
+        const source = film.src;
+        retryTimer = setTimeout(() => {
+          retryTimer = undefined;
+          changeSource(source);
+        }, ++retries * 1500);
       } else {
+        failed = true;
+        error.querySelector("span")!.textContent = "De verbinding met de video is onderbroken.";
         error.hidden = false;
         film.hidden = true;
       }
     };
+    const retry = () => {
+      clearTimeout(retryTimer);
+      retryTimer = undefined;
+      retries = 0;
+      triedAlternative = false;
+      error.hidden = true;
+      changeSource(sourceForViewport());
+      maybePlay(true);
+    };
+    error.querySelector("button")!.addEventListener("click", retry);
+    error.querySelector("a")!.href = sourceForViewport("mp4");
+    window.addEventListener("online", () => { if (failed || retryTimer) retry(); });
     film.addEventListener("error", showError);
     new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting && entry.intersectionRect.width > 0 && entry.intersectionRect.height > 0;
       maybePlay();
     }, { threshold: 0 }).observe(film.parentElement!);
-    document.addEventListener("visibilitychange", maybePlay);
-    reducedMotion.addEventListener("change", maybePlay);
+    document.addEventListener("visibilitychange", () => maybePlay());
+    reducedMotion.addEventListener("change", () => maybePlay());
     let queued = false;
     const updateScroll = () => {
       const reveal = reducedMotion.matches ? 0 : Math.min(1, Math.max(0, -section.getBoundingClientRect().top / (window.innerHeight * .45)));

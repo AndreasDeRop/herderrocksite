@@ -18,6 +18,8 @@ npm run preview
 
 De build voert eerst `astro check` uit en genereert daarna de statische website in `dist/`. Bij lokale OneDrive-bestandsvergrendelingen kan een andere uitvoermap worden gebruikt: `npm run build -- --outDir <lokaal-pad>`.
 
+Beide npm-builds genereren vooraf `worker/video-sizes.json` uit de videobestanden. De Cloudflare Worker gebruikt die groottes om videodownloads in delen te kunnen hervatten. Publiceer de Worker en de bijbehorende assets samen. Gebruik een nieuwe bestandsnaam wanneer een video wordt vervangen, vanwege de browsercache van één dag. `npm test` controleert de speler, gedeeltelijke downloads en de overeenkomst tussen manifest en bestanden.
+
 ## Versie na editie 2026
 
 - De homepage opent met de aftermovie; onder 768px wordt de verticale reel gebruikt.

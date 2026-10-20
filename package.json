@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "prebuild": "node scripts/build-video-manifest.mjs",
+    "prebuild:testing": "node scripts/build-video-manifest.mjs",
+    "test": "node --test tests/video-player.test.mjs tests/video-ranges.test.mjs",
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
